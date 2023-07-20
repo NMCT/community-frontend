@@ -5,8 +5,16 @@ const { passwordReset } = useFirebase()
 export default {
   methods: {
     submitPasswordReset(data: any) {
+      console.log(data)
       console.log('submitPasswordReset')
       passwordReset(data.email)
+        .then(() => {
+          console.log('passwordReset')
+          this.$router.push('/login')
+        })
+        .catch((error: any) => {
+          console.warn('error', error)
+        })
     },
   },
 }

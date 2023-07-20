@@ -136,5 +136,6 @@ export const useFirebase = () => {
     logout,
     passwordReset,
     MicrosoftLogin,
+    MicrosoftLoginResult,
   }
 }

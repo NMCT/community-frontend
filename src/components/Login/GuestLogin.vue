@@ -10,6 +10,7 @@ export default {
       console.log('submitLogin', data)
       try {
         await login(data.email, data.password, data.remember)
+        this.$router.push('/')
       } catch (error) {
         console.warn('error', error)
         this.msg = error.message
@@ -56,7 +57,7 @@ export default {
     <router-link to="/password-reset">Wachtwoord vergeten?</router-link>
   </p>
   <p>
-    <router-link to="/register">Nog geen gast account? Meld aan</router-link>
+    <router-link to="/register">Nog geen gast account? Registreer</router-link>
   </p>
 </template>
 

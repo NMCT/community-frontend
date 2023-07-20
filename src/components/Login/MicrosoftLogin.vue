@@ -1,7 +1,8 @@
 <script lang="ts">
 import { useFirebase } from '@/hooks/useFirebase.ts'
+import { onMounted } from 'vue'
 
-const {} = useFirebase()
+const { MicrosoftLogin, MicrosoftLoginResult } = useFirebase()
 export default {
   name: 'MicrosoftLogin',
   components: {},
@@ -11,7 +12,15 @@ export default {
   methods: {
     login() {
       console.log('login')
+      MicrosoftLogin()
     },
+  },
+  setup() {
+    onMounted(() => {
+      MicrosoftLoginResult().catch((error: any) => {
+        console.warn('error while checking microsoft login', error)
+      })
+    })
   },
 }
 </script>
@@ -19,7 +28,7 @@ export default {
 <template>
   <div>
     <h3>Microsoft Login</h3>
-    <button @click="">Log in with Microsoft</button>
+    <button @click="login">Log in with Microsoft</button>
   </div>
 </template>
 
