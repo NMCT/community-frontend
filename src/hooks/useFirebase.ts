@@ -1,7 +1,7 @@
 import { FirebaseApp, initializeApp } from 'firebase/app'
 import {
   Auth,
-  browserLocalPersistence,
+  browserSessionPersistence,
   createUserWithEmailAndPassword,
   getAuth,
   setPersistence,
@@ -38,7 +38,7 @@ const app: FirebaseApp = initializeApp({
 console.log({ app })
 const auth: Auth = getAuth(app)
 
-setPersistence(auth, browserLocalPersistence)
+setPersistence(auth, browserSessionPersistence)
   .then(r => console.log('setPersistence', r))
   .catch(e => console.log('setPersistence', e))
 
@@ -116,8 +116,8 @@ export const useFirebase = () => {
               reject({ code: 'no credential', message: 'no credential' })
               return
             }
-            const accessToken = credential.accessToken
-            const idToken = credential.idToken
+            // const accessToken = credential.accessToken
+            // const idToken = credential.idToken
             const user = result.user
             resolve(user)
           }

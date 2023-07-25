@@ -2,12 +2,15 @@ import { createApp } from 'vue'
 import './style.css'
 import Login from '@/pages/auth/login.vue'
 import Home from '@/pages/index.vue'
-import { createRouter, createWebHistory } from 'vue-router'
+import { createRouter, createWebHistory, NavigationGuardNext, RouteLocationNormalized } from 'vue-router'
 import App from '@/App.vue'
 import { userStore } from './store/stores.ts'
 import { autoAnimatePlugin } from '@formkit/auto-animate/vue'
 import { plugin, defaultConfig } from '@formkit/vue'
 import config from '../formkit.config.ts'
+import { getAuth, onAuthStateChanged } from 'firebase/auth'
+import { DefaultApolloClient } from '@vue/apollo-composable'
+import { apolloClient, InMemoryCache } from '@apollo/client'
 
 const routes = [
   {
@@ -45,7 +48,25 @@ const router = createRouter({
 const allowedRoutes = ['Login', 'Register', 'PasswordReset', '404']
 
 router.beforeEach((to, _, next) => {
+  if (!userStore.user){
+    const auth = getAuth();
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        userStore.user = user;
+      } else {
+        userStore.user = null;
+      }
+      navigate(to, next)
+    });
+  }
+  else{
+    navigate(to, next)
+  }
   console.debug('navigating to', to.path)
+
+})
+
+const navigate = (to: RouteLocationNormalized, next: NavigationGuardNext) => {
   if (!to.name) {
     next({ name: '404' })
     return
@@ -55,7 +76,7 @@ router.beforeEach((to, _, next) => {
   } else if (userStore.user !== null && to.name === 'Login') {
     next({ name: 'Home' })
   } else next()
-})
+}
 
 createApp(App)
   .use(router)
