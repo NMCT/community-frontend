@@ -9,8 +9,6 @@ import { autoAnimatePlugin } from '@formkit/auto-animate/vue'
 import { plugin, defaultConfig } from '@formkit/vue'
 import config from '../formkit.config.ts'
 import { getAuth, onAuthStateChanged } from 'firebase/auth'
-import { DefaultApolloClient } from '@vue/apollo-composable'
-import { apolloClient, InMemoryCache } from '@apollo/client'
 
 const routes = [
   {
