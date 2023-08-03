@@ -1,10 +1,13 @@
 import { reactive } from 'vue'
 import { User } from 'firebase/auth'
+import {User as backendUser} from "@/gql/graphql.ts"
 
 export interface UserStore {
-  user: User | null
+  firebaseUser: User | null
+  backendUser: backendUser | null
 }
 
 export const userStore = reactive<UserStore>({
-  user: null,
+  firebaseUser: null,
+  backendUser: null
 })

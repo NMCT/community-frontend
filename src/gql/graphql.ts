@@ -67,7 +67,7 @@ export type Event = {
   location: Scalars['String']['output'];
   maxAttendees: Scalars['Int']['output'];
   openToGuests: Scalars['Boolean']['output'];
-  organizer: Scalars['String']['output'];
+  organizer: ShortUser;
   startDate: Scalars['DateTime']['output'];
   title: Scalars['String']['output'];
   type: EventType;
@@ -86,7 +86,7 @@ export type EventFilterInput = {
   maxAttendees?: InputMaybe<IntOperationFilterInput>;
   openToGuests?: InputMaybe<BooleanOperationFilterInput>;
   or?: InputMaybe<Array<EventFilterInput>>;
-  organizer?: InputMaybe<StringOperationFilterInput>;
+  organizer?: InputMaybe<ShortUserFilterInput>;
   startDate?: InputMaybe<DateTimeOperationFilterInput>;
   title?: InputMaybe<StringOperationFilterInput>;
   type?: InputMaybe<EventTypeOperationFilterInput>;
@@ -103,7 +103,7 @@ export type EventInput = {
   location: Scalars['String']['input'];
   maxAttendees: Scalars['Int']['input'];
   openToGuests: Scalars['Boolean']['input'];
-  organizer: Scalars['String']['input'];
+  organizer: ShortUserInput;
   startDate: Scalars['DateTime']['input'];
   title: Scalars['String']['input'];
   type: EventType;
@@ -118,7 +118,7 @@ export type EventSortInput = {
   location?: InputMaybe<SortEnumType>;
   maxAttendees?: InputMaybe<SortEnumType>;
   openToGuests?: InputMaybe<SortEnumType>;
-  organizer?: InputMaybe<SortEnumType>;
+  organizer?: InputMaybe<ShortUserSortInput>;
   startDate?: InputMaybe<SortEnumType>;
   title?: InputMaybe<SortEnumType>;
   type?: InputMaybe<SortEnumType>;
@@ -138,11 +138,19 @@ export type EventTypeOperationFilterInput = {
 };
 
 export type EventUpdateInput = {
-  link?: InputMaybe<Scalars['String']['input']>;
-  message?: InputMaybe<Scalars['String']['input']>;
+  description?: InputMaybe<Scalars['String']['input']>;
+  endDate?: InputMaybe<Scalars['DateTime']['input']>;
+  eventId: Scalars['ObjectId']['input'];
+  location?: InputMaybe<Scalars['String']['input']>;
+  maxAttendees?: InputMaybe<Scalars['Int']['input']>;
+  openToGuests?: InputMaybe<Scalars['Boolean']['input']>;
   sendUpdate: Scalars['Boolean']['input'];
+  startDate?: InputMaybe<Scalars['DateTime']['input']>;
   title?: InputMaybe<Scalars['String']['input']>;
   updateAudience?: InputMaybe<UpdateAudience>;
+  updateLink?: InputMaybe<Scalars['String']['input']>;
+  updateMessage?: InputMaybe<Scalars['String']['input']>;
+  updateTitle?: InputMaybe<Scalars['String']['input']>;
 };
 
 /** A segment of a collection. */
@@ -176,13 +184,6 @@ export type ListFilterInputTypeOfShortUserFilterInput = {
   some?: InputMaybe<ShortUserFilterInput>;
 };
 
-export type ListObjectIdOperationFilterInput = {
-  all?: InputMaybe<ObjectIdOperationFilterInput>;
-  any?: InputMaybe<Scalars['Boolean']['input']>;
-  none?: InputMaybe<ObjectIdOperationFilterInput>;
-  some?: InputMaybe<ObjectIdOperationFilterInput>;
-};
-
 export type Mutation = {
   __typename?: 'Mutation';
   attendEvent: Event;
@@ -191,7 +192,6 @@ export type Mutation = {
   firstLogin: User;
   interestedEvent: Event;
   readNotification: Notification;
-  showInterest: User;
   unattendEvent: Event;
   uninterestedEvent: Event;
   updateEvent: Event;
@@ -201,8 +201,6 @@ export type Mutation = {
 
 export type MutationAttendEventArgs = {
   eventId: Scalars['String']['input'];
-  idToken: Scalars['String']['input'];
-  user: ShortUserInput;
 };
 
 
@@ -211,54 +209,32 @@ export type MutationCreateEventArgs = {
 };
 
 
-export type MutationDeleteUserArgs = {
-  idToken: Scalars['String']['input'];
-};
-
-
-export type MutationFirstLoginArgs = {
-  idToken: Scalars['String']['input'];
-};
-
-
 export type MutationInterestedEventArgs = {
   eventId: Scalars['String']['input'];
-  user: ShortUserInput;
 };
 
 
 export type MutationReadNotificationArgs = {
   id: Scalars['String']['input'];
-  idToken: Scalars['String']['input'];
-};
-
-
-export type MutationShowInterestArgs = {
-  eventId: Scalars['String']['input'];
-  idToken: Scalars['String']['input'];
 };
 
 
 export type MutationUnattendEventArgs = {
   eventId: Scalars['String']['input'];
-  user: ShortUserInput;
 };
 
 
 export type MutationUninterestedEventArgs = {
   eventId: Scalars['String']['input'];
-  user: ShortUserInput;
 };
 
 
 export type MutationUpdateEventArgs = {
-  input: EventInput;
-  update?: InputMaybe<EventUpdateInput>;
+  update: EventUpdateInput;
 };
 
 
 export type MutationUpdateSocialsArgs = {
-  idToken: Scalars['String']['input'];
   socials: SocialsInput;
 };
 
@@ -293,9 +269,7 @@ export type ObjectIdOperationFilterInput = {
 export type Query = {
   __typename?: 'Query';
   event?: Maybe<Event>;
-  eventPublic?: Maybe<Event>;
   events?: Maybe<EventsCollectionSegment>;
-  eventsPublic: Array<Event>;
   notifications: Array<Notification>;
   user?: Maybe<User>;
   users: Array<User>;
@@ -303,11 +277,6 @@ export type Query = {
 
 
 export type QueryEventArgs = {
-  id: Scalars['String']['input'];
-};
-
-
-export type QueryEventPublicArgs = {
   id: Scalars['String']['input'];
 };
 
@@ -326,7 +295,7 @@ export type QueryNotificationsArgs = {
 
 
 export type QueryUserArgs = {
-  id: Scalars['String']['input'];
+  uid: Scalars['String']['input'];
 };
 
 
@@ -338,7 +307,6 @@ export type QueryUsersArgs = {
 export type ShortUser = {
   __typename?: 'ShortUser';
   email?: Maybe<Scalars['String']['output']>;
-  id?: Maybe<Scalars['ObjectId']['output']>;
   name?: Maybe<Scalars['String']['output']>;
   profilePicture?: Maybe<Scalars['String']['output']>;
   uid: Scalars['String']['output'];
@@ -347,7 +315,6 @@ export type ShortUser = {
 export type ShortUserFilterInput = {
   and?: InputMaybe<Array<ShortUserFilterInput>>;
   email?: InputMaybe<StringOperationFilterInput>;
-  id?: InputMaybe<ObjectIdOperationFilterInput>;
   name?: InputMaybe<StringOperationFilterInput>;
   or?: InputMaybe<Array<ShortUserFilterInput>>;
   profilePicture?: InputMaybe<StringOperationFilterInput>;
@@ -356,10 +323,16 @@ export type ShortUserFilterInput = {
 
 export type ShortUserInput = {
   email?: InputMaybe<Scalars['String']['input']>;
-  id?: InputMaybe<Scalars['ObjectId']['input']>;
   name?: InputMaybe<Scalars['String']['input']>;
   profilePicture?: InputMaybe<Scalars['String']['input']>;
   uid: Scalars['String']['input'];
+};
+
+export type ShortUserSortInput = {
+  email?: InputMaybe<SortEnumType>;
+  name?: InputMaybe<SortEnumType>;
+  profilePicture?: InputMaybe<SortEnumType>;
+  uid?: InputMaybe<SortEnumType>;
 };
 
 export type Socials = {
@@ -467,8 +440,6 @@ export type UrlOperationFilterInput = {
 export type User = {
   __typename?: 'User';
   email?: Maybe<Scalars['String']['output']>;
-  eventsAttending?: Maybe<Array<Scalars['ObjectId']['output']>>;
-  eventsInterested?: Maybe<Array<Scalars['ObjectId']['output']>>;
   firebaseId: Scalars['String']['output'];
   id?: Maybe<Scalars['ObjectId']['output']>;
   profilePictureUri?: Maybe<Scalars['String']['output']>;
@@ -480,8 +451,6 @@ export type User = {
 export type UserFilterInput = {
   and?: InputMaybe<Array<UserFilterInput>>;
   email?: InputMaybe<StringOperationFilterInput>;
-  eventsAttending?: InputMaybe<ListObjectIdOperationFilterInput>;
-  eventsInterested?: InputMaybe<ListObjectIdOperationFilterInput>;
   firebaseId?: InputMaybe<StringOperationFilterInput>;
   id?: InputMaybe<ObjectIdOperationFilterInput>;
   or?: InputMaybe<Array<UserFilterInput>>;
@@ -504,6 +473,7 @@ export type UserSortInput = {
 export enum UserType {
   Admin = 'ADMIN',
   Guest = 'GUEST',
+  None = 'NONE',
   User = 'USER'
 }
 
@@ -514,11 +484,6 @@ export type UserTypeOperationFilterInput = {
   nin?: InputMaybe<Array<UserType>>;
 };
 
-export type GetEventsQueryVariables = Exact<{ [key: string]: never; }>;
-
-
-export type GetEventsQuery = { __typename?: 'Query', events?: { __typename?: 'EventsCollectionSegment', items?: Array<{ __typename?: 'Event', id?: any | null, title: string, location: string }> | null } | null };
-
 export type CreateEventMutationVariables = Exact<{
   input: EventInput;
 }>;
@@ -526,6 +491,33 @@ export type CreateEventMutationVariables = Exact<{
 
 export type CreateEventMutation = { __typename?: 'Mutation', createEvent: { __typename?: 'Event', id?: any | null } };
 
+export type FirstLoginMutationVariables = Exact<{ [key: string]: never; }>;
 
-export const GetEventsDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"getEvents"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"events"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"items"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"title"}},{"kind":"Field","name":{"kind":"Name","value":"location"}}]}}]}}]}}]} as unknown as DocumentNode<GetEventsQuery, GetEventsQueryVariables>;
+
+export type FirstLoginMutation = { __typename?: 'Mutation', firstLogin: { __typename?: 'User', email?: string | null, type: UserType, username?: string | null, profilePictureUri?: string | null } };
+
+export type GetUserQueryVariables = Exact<{
+  id: Scalars['String']['input'];
+}>;
+
+
+export type GetUserQuery = { __typename?: 'Query', user?: { __typename?: 'User', id?: any | null, profilePictureUri?: string | null, email?: string | null, username?: string | null, firebaseId: string, socials?: { __typename?: 'Socials', discord: string, facebook: any, instagram: any, linkedIn: any } | null } | null };
+
+export type GetEventsQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GetEventsQuery = { __typename?: 'Query', events?: { __typename?: 'EventsCollectionSegment', items?: Array<{ __typename?: 'Event', id?: any | null, title: string, location: string }> | null } | null };
+
+export type CreateNewEventMutationVariables = Exact<{
+  input: EventInput;
+}>;
+
+
+export type CreateNewEventMutation = { __typename?: 'Mutation', createEvent: { __typename?: 'Event', title: string, location: string, type: EventType, description: string, startDate: any, endDate: any, maxAttendees: number, openToGuests: boolean } };
+
+
 export const CreateEventDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"createEvent"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"input"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"EventInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"createEvent"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"input"},"value":{"kind":"Variable","name":{"kind":"Name","value":"input"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}}]}}]}}]} as unknown as DocumentNode<CreateEventMutation, CreateEventMutationVariables>;
+export const FirstLoginDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"firstLogin"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"firstLogin"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"email"}},{"kind":"Field","name":{"kind":"Name","value":"type"}},{"kind":"Field","name":{"kind":"Name","value":"username"}},{"kind":"Field","name":{"kind":"Name","value":"profilePictureUri"}}]}}]}}]} as unknown as DocumentNode<FirstLoginMutation, FirstLoginMutationVariables>;
+export const GetUserDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"getUser"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"id"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"user"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"uid"},"value":{"kind":"Variable","name":{"kind":"Name","value":"id"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"profilePictureUri"}},{"kind":"Field","name":{"kind":"Name","value":"email"}},{"kind":"Field","name":{"kind":"Name","value":"username"}},{"kind":"Field","name":{"kind":"Name","value":"socials"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"discord"}},{"kind":"Field","name":{"kind":"Name","value":"facebook"}},{"kind":"Field","name":{"kind":"Name","value":"instagram"}},{"kind":"Field","name":{"kind":"Name","value":"linkedIn"}}]}},{"kind":"Field","name":{"kind":"Name","value":"firebaseId"}}]}}]}}]} as unknown as DocumentNode<GetUserQuery, GetUserQueryVariables>;
+export const GetEventsDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"getEvents"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"events"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"items"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"title"}},{"kind":"Field","name":{"kind":"Name","value":"location"}}]}}]}}]}}]} as unknown as DocumentNode<GetEventsQuery, GetEventsQueryVariables>;
+export const CreateNewEventDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"createNewEvent"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"input"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"EventInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"createEvent"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"input"},"value":{"kind":"Variable","name":{"kind":"Name","value":"input"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"title"}},{"kind":"Field","name":{"kind":"Name","value":"location"}},{"kind":"Field","name":{"kind":"Name","value":"type"}},{"kind":"Field","name":{"kind":"Name","value":"description"}},{"kind":"Field","name":{"kind":"Name","value":"startDate"}},{"kind":"Field","name":{"kind":"Name","value":"endDate"}},{"kind":"Field","name":{"kind":"Name","value":"maxAttendees"}},{"kind":"Field","name":{"kind":"Name","value":"openToGuests"}}]}}]}}]} as unknown as DocumentNode<CreateNewEventMutation, CreateNewEventMutationVariables>;

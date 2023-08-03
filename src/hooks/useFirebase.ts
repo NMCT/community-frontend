@@ -69,7 +69,7 @@ export const useFirebase = () => {
         .then(userCredential => {
           // Signed in
           const user = userCredential.user
-          userStore.user = user
+          userStore.firebaseUser = user
           setTimeout(() => {
             resolve(user)
           })

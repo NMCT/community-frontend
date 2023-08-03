@@ -40,17 +40,16 @@ type EventsCollectionSegment {
 }
 
 type Mutation {
-    attendEvent(eventId: String!, idToken: String!, user: ShortUserInput!): Event!
+    attendEvent(eventId: String!): Event!
     createEvent(input: EventInput!): Event!
-    deleteUser(idToken: String!): Boolean!
-    firstLogin(idToken: String!): User!
-    interestedEvent(eventId: String!, user: ShortUserInput!): Event!
-    readNotification(id: String!, idToken: String!): Notification!
-    showInterest(eventId: String!, idToken: String!): User!
-    unattendEvent(eventId: String!, user: ShortUserInput!): Event!
-    uninterestedEvent(eventId: String!, user: ShortUserInput!): Event!
-    updateEvent(input: EventInput!, update: EventUpdateInput): Event!
-    updateSocials(idToken: String!, socials: SocialsInput!): User!
+    deleteUser: Boolean!
+    firstLogin: User!
+    interestedEvent(eventId: String!): Event!
+    readNotification(id: String!): Notification!
+    unattendEvent(eventId: String!): Event!
+    uninterestedEvent(eventId: String!): Event!
+    updateEvent(update: EventUpdateInput!): Event!
+    updateSocials(socials: SocialsInput!): User!
 }
 
 type Notification {
@@ -67,17 +66,14 @@ type Notification {
 
 type Query {
     event(id: String!): Event
-    eventPublic(id: String!): Event
     events(order: [EventSortInput!], skip: Int, take: Int, where: EventFilterInput): EventsCollectionSegment
-    eventsPublic: [Event!]!
     notifications(idToken: String!): [Notification!]!
-    user(id: String!): User
+    user(uid: String!): User
     users(order: [UserSortInput!], where: UserFilterInput): [User!]!
 }
 
 type ShortUser {
     email: String
-    id: ObjectId
     name: String
     profilePicture: String
     uid: String!
@@ -96,8 +92,6 @@ type Subscription {
 
 type User {
     email: String
-    eventsAttending: [ObjectId!]
-    eventsInterested: [ObjectId!]
     firebaseId: String!
     id: ObjectId
     profilePictureUri: String
@@ -132,6 +126,7 @@ enum UpdateAudience {
 enum UserType {
     ADMIN
     GUEST
+    NONE
     USER
 }
 
@@ -222,11 +217,19 @@ input EventTypeOperationFilterInput {
 }
 
 input EventUpdateInput {
-    link: String
-    message: String
+    description: String
+    endDate: DateTime
+    eventId: ObjectId!
+    location: String
+    maxAttendees: Int
+    openToGuests: Boolean
     sendUpdate: Boolean!
+    startDate: DateTime
     title: String
     updateAudience: UpdateAudience
+    updateLink: String
+    updateMessage: String
+    updateTitle: String
 }
 
 input IntOperationFilterInput {
@@ -251,13 +254,6 @@ input ListFilterInputTypeOfShortUserFilterInput {
     some: ShortUserFilterInput
 }
 
-input ListObjectIdOperationFilterInput {
-    all: ObjectIdOperationFilterInput
-    any: Boolean
-    none: ObjectIdOperationFilterInput
-    some: ObjectIdOperationFilterInput
-}
-
 input ObjectIdOperationFilterInput {
     eq: ObjectId
     gt: ObjectId
@@ -276,7 +272,6 @@ input ObjectIdOperationFilterInput {
 input ShortUserFilterInput {
     and: [ShortUserFilterInput!]
     email: StringOperationFilterInput
-    id: ObjectIdOperationFilterInput
     name: StringOperationFilterInput
     or: [ShortUserFilterInput!]
     profilePicture: StringOperationFilterInput
@@ -285,7 +280,6 @@ input ShortUserFilterInput {
 
 input ShortUserInput {
     email: String
-    id: ObjectId
     name: String
     profilePicture: String
     uid: String!
@@ -371,8 +365,6 @@ input UrlOperationFilterInput {
 input UserFilterInput {
     and: [UserFilterInput!]
     email: StringOperationFilterInput
-    eventsAttending: ListObjectIdOperationFilterInput
-    eventsInterested: ListObjectIdOperationFilterInput
     firebaseId: StringOperationFilterInput
     id: ObjectIdOperationFilterInput
     or: [UserFilterInput!]

@@ -2,10 +2,16 @@
 import { useMutation, useQuery } from '@vue/apollo-composable'
 import { graphql } from '@/gql'
 import { EventInput } from '@/gql/graphql.ts'
+import { ref, watch } from 'vue'
+import { userStore } from '@/store/stores.ts'
+import useMutations from '@/hooks/useMutations.ts'
+
+console.log(userStore.firebaseUser.uid)
+
 
 const { result, loading, error } = useQuery(
   graphql(
-      `
+    `
        query getEvents {
             events{
             items {
@@ -18,30 +24,25 @@ const { result, loading, error } = useQuery(
 )
 console.log(result)
 
-const input : EventInput = {
+const input = ref<EventInput | null>(null)
+const token = ref<string>();
 
-}
+if (!userStore.firebaseUser) throw new Error()
+const {login} = useMutations()
+login();
 
-const { mutate } = useMutation(graphql(`mutation createEvent ($input: EventInput!){
-    createEvent(input: $input){
-    id
-    }
-}`), () => ({
-  variables: {
-    input: input
-  }
-}))
-
-
+watch(token, async () => {
+  console.log("your token", token.value)
+})
 </script>
 
 <template>
-<div v-if='loading'>
-  ...
-</div>
+  <div v-if='loading'>
+    ...
+  </div>
   <ul v-else-if='result && result.events && !error'>
     <li v-for='event of result.events.items' :key='event.id'>
-      {{event.title}} {{event.location}}
+      {{ event.title }} {{ event.location }}
     </li>
   </ul>
 
