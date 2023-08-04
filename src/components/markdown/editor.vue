@@ -24,6 +24,11 @@ const props = defineProps(
       required: false,
       default: '',
     },
+    label: {
+      type: String,
+      required: false,
+      default: '',
+    },
   },
 )
 const emits = defineEmits(['update'])
@@ -44,6 +49,9 @@ watch(output, () => {
 </script>
 
 <template>
+  <div class='label' v-if='label'>
+    <strong>{{label}}</strong>
+  </div>
   <div class='editor' v-if='view === "editor"'>
     <textarea name='input' :value='input' @input='update' :placeholder='placeholder'></textarea>
   </div>

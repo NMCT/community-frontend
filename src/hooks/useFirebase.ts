@@ -129,6 +129,20 @@ export const useFirebase = () => {
         })
     })
   }
+
+  const getUserType = async (): Promise<string> => {
+    // get claims
+    if (auth.currentUser === null) throw new Error('no user')
+    const idTokenResult = await auth.currentUser.getIdTokenResult()
+    const claims = idTokenResult.claims
+    if (claims === undefined) throw new Error('no claims')
+    console.log({ claims })
+    if (claims.Admin === true) return 'Admin'
+    if (claims.User === true) return 'User'
+    if (claims.Guest === true) return 'Guest'
+    throw new Error('no user type')
+  }
+
   return {
     register,
     login,
@@ -137,5 +151,6 @@ export const useFirebase = () => {
     passwordReset,
     MicrosoftLogin,
     MicrosoftLoginResult,
+    getUserType,
   }
 }
