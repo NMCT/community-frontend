@@ -91,7 +91,9 @@ onMounted(async () => {
       type='number'
       name='maxAttendees'
       label='Maximale aantal deelnemers'
-      validation='required|number|between:1,1000'
+      validation='required|number'
+      min='1'
+      max='1000'
     />
     <FormKit
       type='checkbox'
