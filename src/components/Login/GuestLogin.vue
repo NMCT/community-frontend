@@ -1,32 +1,54 @@
-<script lang="ts">
-import { useFirebase } from '@/hooks/useFirebase.ts'
-import Error from '@/components/error.vue'
-const { login } = useFirebase()
-console.log('login', login)
-export default {
-  methods: {
-    async submitLogin(data: any) {
-      this.msg = ''
-      console.log('submitLogin', data)
-      try {
-        await login(data.email, data.password, data.remember)
-        this.$router.push('/')
-      } catch (error) {
-        console.warn('error', error)
-        this.msg = error.message
-      }
-    },
-  },
-  components: {
-    Error,
-  },
-  data() {
-    return {
-      msg: '',
-    }
-  },
+<script setup lang="ts">
+import { ref, defineProps } from 'vue';
+import {useRouter} from "vue-router";
+import {userStore} from "@/store/stores.ts";
+import {useFirebase} from "@/hooks/useFirebase.ts";
+import {useMutation} from "@vue/apollo-composable";
+import { graphql } from '@/gql'
+const { login } = useFirebase();
+
+
+const msg = ref('');
+const router = useRouter()
+
+// Mutation to register login
+const { mutate: registerLoginMutation } = useMutation(graphql(`
+  mutation registerLogin($idToken: String!) {
+        firstLogin(idToken: $idToken) {
+            id
+            email
+            type
+        }
+    }`))
+
+
+
+
+async function registerLogin() {
+
+  console.log('registerLogin', userStore.firebaseUser)
+  if (!userStore.firebaseUser) throw new Error('not logged in');
+  const idToken = await userStore.firebaseUser.getIdToken();
+  const mutationResult = await registerLoginMutation({idToken});
+}
+
+async function submitLogin(data) {
+  msg.value = '';
+  console.log('submitLogin', data);
+  try {
+    await login(data.email, data.password, data.remember);
+    await registerLogin();
+    await router.push('/')
+  } catch (error) {
+    console.warn('error', error);
+    msg.value = error.message;
+  }
 }
 </script>
+
+
+
+
 
 <template>
   <h3>Login Als Gast</h3>

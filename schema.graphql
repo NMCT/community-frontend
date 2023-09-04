@@ -24,7 +24,7 @@ type Event {
     location: String!
     maxAttendees: Int!
     openToGuests: Boolean!
-    organizer: String!
+    organizer: ShortUser!
     startDate: DateTime!
     title: String!
     type: EventType!
@@ -41,11 +41,13 @@ type EventsCollectionSegment {
 
 type Mutation {
     attendEvent(eventId: String!): Event!
+    changeDisplayName(displayName: String!): User!
     createEvent(input: EventInput!): Event!
     deleteUser: Boolean!
-    firstLogin: User!
+    firstLogin(idToken: String!): User!
     interestedEvent(eventId: String!): Event!
     readNotification(id: String!): Notification!
+    test: Boolean!
     unattendEvent(eventId: String!): Event!
     uninterestedEvent(eventId: String!): Event!
     updateEvent(update: EventUpdateInput!): Event!
@@ -64,10 +66,18 @@ type Notification {
     userId: String
 }
 
+"A segment of a collection."
+type NotificationsCollectionSegment {
+    "A flattened list of the items."
+    items: [Notification!]
+    "Information to aid in pagination."
+    pageInfo: CollectionSegmentInfo!
+}
+
 type Query {
     event(id: String!): Event
     events(order: [EventSortInput!], skip: Int, take: Int, where: EventFilterInput): EventsCollectionSegment
-    notifications(idToken: String!): [Notification!]!
+    notifications(order: [NotificationSortInput!], skip: Int, take: Int, where: NotificationFilterInput): NotificationsCollectionSegment
     user(uid: String!): User
     users(order: [UserSortInput!], where: UserFilterInput): [User!]!
 }
@@ -170,7 +180,7 @@ input EventFilterInput {
     maxAttendees: IntOperationFilterInput
     openToGuests: BooleanOperationFilterInput
     or: [EventFilterInput!]
-    organizer: StringOperationFilterInput
+    organizer: ShortUserFilterInput
     startDate: DateTimeOperationFilterInput
     title: StringOperationFilterInput
     type: EventTypeOperationFilterInput
@@ -187,7 +197,7 @@ input EventInput {
     location: String!
     maxAttendees: Int!
     openToGuests: Boolean!
-    organizer: String!
+    organizer: ShortUserInput!
     startDate: DateTime!
     title: String!
     type: EventType!
@@ -202,7 +212,7 @@ input EventSortInput {
     location: SortEnumType
     maxAttendees: SortEnumType
     openToGuests: SortEnumType
-    organizer: SortEnumType
+    organizer: ShortUserSortInput
     startDate: SortEnumType
     title: SortEnumType
     type: SortEnumType
@@ -254,6 +264,32 @@ input ListFilterInputTypeOfShortUserFilterInput {
     some: ShortUserFilterInput
 }
 
+input NotificationFilterInput {
+    and: [NotificationFilterInput!]
+    createdAt: DateTimeOperationFilterInput
+    eventId: ObjectIdOperationFilterInput
+    id: ObjectIdOperationFilterInput
+    isRead: BooleanOperationFilterInput
+    link: StringOperationFilterInput
+    message: StringOperationFilterInput
+    or: [NotificationFilterInput!]
+    readAt: DateTimeOperationFilterInput
+    title: StringOperationFilterInput
+    userId: StringOperationFilterInput
+}
+
+input NotificationSortInput {
+    createdAt: SortEnumType
+    eventId: SortEnumType
+    id: SortEnumType
+    isRead: SortEnumType
+    link: SortEnumType
+    message: SortEnumType
+    readAt: SortEnumType
+    title: SortEnumType
+    userId: SortEnumType
+}
+
 input ObjectIdOperationFilterInput {
     eq: ObjectId
     gt: ObjectId
@@ -283,6 +319,13 @@ input ShortUserInput {
     name: String
     profilePicture: String
     uid: String!
+}
+
+input ShortUserSortInput {
+    email: SortEnumType
+    name: SortEnumType
+    profilePicture: SortEnumType
+    uid: SortEnumType
 }
 
 input SocialsFilterInput {

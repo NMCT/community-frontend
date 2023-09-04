@@ -28,8 +28,7 @@ const input = ref<EventInput | null>(null)
 const token = ref<string>();
 
 if (!userStore.firebaseUser) throw new Error()
-const {login} = useMutations()
-login();
+
 
 watch(token, async () => {
   console.log("your token", token.value)
