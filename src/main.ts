@@ -12,7 +12,7 @@ import { router } from '@/bootstrap/router.ts'
 
 library.add(faSpinner)
 const { restoreLogin } = useFirebase()
-const user = await restoreLogin()
+await restoreLogin()
 
 
 createApp(App)

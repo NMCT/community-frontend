@@ -17,7 +17,7 @@ export default {
       const email = data.email
       const password = data.password
       register(email, password, data.username).then(()=>{
-        this.$router.push('/')
+        this.$router.push('/events')
       })
       .catch((error: any) => {
         this.msg = error.message

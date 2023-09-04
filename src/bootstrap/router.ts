@@ -1,41 +1,59 @@
-import { createRouter, createWebHistory, NavigationGuardNext, RouteLocationNormalized } from 'vue-router'
+import {createRouter, createWebHistory} from 'vue-router'
 import Home from '@/pages/index.vue'
 import Login from '@/pages/auth/login.vue'
-import { userStore } from '@/store/stores.ts'
-import { getAuth, onAuthStateChanged } from 'firebase/auth'
-import { useFirebase } from '@/hooks/useFirebase.ts'
+import {userStore} from '@/store/stores.ts'
+import {useFirebase} from '@/hooks/useFirebase.ts'
+
 const {logout} = useFirebase();
+
+export enum routes {
+    landing = "Landing",
+    events = "Home",
+    login = "Login",
+    register = "Register",
+    passwordReset = "PasswordReset",
+    account = "Account",
+    accountHome = "AccountHome",
+    new = "New",
+    notFound = "404"
+
+}
 
 export const router = createRouter({
   history: createWebHistory(),
   routes: [
+      {
+        path: '/',
+        name: routes.landing,
+        component: () => import('@/pages/landing.vue'),
+      },
     {
-      path: '/',
-      name: 'Home',
+      path: '/events',
+      name: routes.events,
       component: Home,
     },
     {
       path: '/login',
-      name: 'Login',
+      name: routes.login,
       component: Login,
     },
     {
       path: '/register',
-      name: 'Register',
+      name: routes.register,
       component: () => import('@/pages/auth/register.vue'),
     },
     {
       path: '/password-reset',
-      name: 'PasswordReset',
+      name: routes.passwordReset,
       component: () => import('@/pages/auth/passwordReset.vue'),
     },
     {
       path: '/account',
-      name: 'Account',
+      name: routes.account,
       children: [
         {
           path: '',
-          name: 'AccountHome',
+          name: routes.accountHome,
           component: () => import('@/pages/account/index.vue'),
         }
       ]
@@ -43,35 +61,34 @@ export const router = createRouter({
     },
     {
       path: '/new',
-      name: 'New',
+      name: routes.new,
       component: () => import('@/pages/new.vue'),
     },
     {
       path: '/:pathMatch(.*)*',
-      name: '404',
+      name: routes.notFound,
       component: () => import('@/pages/404.vue'),
     },
   ],
 })
 
 
-const allowedRoutes = ['Login', 'Register', 'PasswordReset', '404']
-const allowedPaths = ['/login', '/register', '/password-reset', '/new', '/logout']
+const allowedRoutes: routes[] = [routes.login, routes.register, routes.passwordReset, routes.landing, routes.notFound]
 router.beforeEach((to, _, next) => {
     if (!to.name) {
-        next({ name: '404' })
+        next({ name: routes.notFound })
         return
     }
     if (to.path == "/logout"){
         logout();
-        next({name: "Login"})
+        next({name: routes.events})
         return
     }
-    if (userStore.firebaseUser === null && !allowedRoutes.includes(to.name.toString())) {
-        next({ name: 'Login' })
+    if (userStore.firebaseUser === null && !allowedRoutes.includes(to.name.toString() as routes)) {
+        next({ name: routes.login })
         return
     } else if (userStore.firebaseUser !== null && to.name === 'Login') {
-        next({ name: 'Home' })
+        next({ name: routes.events })
         return
     } else next()
 })

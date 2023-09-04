@@ -38,7 +38,7 @@ async function submitLogin(data) {
   try {
     await login(data.email, data.password, data.remember);
     await registerLogin();
-    await router.push('/')
+    await router.push('/events')
   } catch (error) {
     console.warn('error', error);
     msg.value = error.message;

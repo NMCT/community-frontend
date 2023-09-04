@@ -15,13 +15,13 @@ import {
   OAuthProvider, onAuthStateChanged,
 } from 'firebase/auth'
 
-const provider = new OAuthProvider('microsoft.com')
+const microsoftProvider = new OAuthProvider('microsoft.com')
 
-provider.setCustomParameters({
+microsoftProvider.setCustomParameters({
   // Force re-consent.
-  prompt: 'consent',
+  // prompt: 'consent',
   // Target specific email with login hint.
-  login_hint: 'user@student.howest.be',
+  // login_hint: 'user@student.howest.be',
 })
 
 import { userStore } from '../store/stores.ts'
@@ -103,7 +103,7 @@ export const useFirebase = () => {
   }
 
   const MicrosoftLogin = async (): Promise<void> => {
-    await signInWithRedirect(auth, provider)
+    await signInWithRedirect(auth, microsoftProvider)
   }
   const MicrosoftLoginResult = async (): Promise<User> => {
     new Promise((resolve, reject) => {

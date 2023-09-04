@@ -4,7 +4,6 @@ import { graphql } from '@/gql'
 import { EventInput } from '@/gql/graphql.ts'
 import { ref, watch } from 'vue'
 import { userStore } from '@/store/stores.ts'
-import useMutations from '@/hooks/useMutations.ts'
 
 console.log(userStore.firebaseUser.uid)
 
