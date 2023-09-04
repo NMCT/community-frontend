@@ -19,7 +19,9 @@ const microsoftProvider = new OAuthProvider('microsoft.com')
 
 microsoftProvider.setCustomParameters({
   // Force re-consent.
-  // prompt: 'consent',
+  prompt: 'select_account',
+  tenant: '4ded4bb1-6bff-42b3-aed7-6a36a503bf7a'
+
   // Target specific email with login hint.
   // login_hint: 'user@student.howest.be',
 })
