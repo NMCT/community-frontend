@@ -24,19 +24,25 @@ export default () => {
   }
 
   const login = () => {
-    const gql = graphql(`
-        mutation firstLogin {
-            firstLogin{
-                email,
-                type,
-                username,
-                profilePictureUri
-            }
-        }
-    `)
-    const { mutate } = useMutation(gql)
-    const res = mutate();
-    console.log(res)
+      try {
+          const gql = graphql(`
+              mutation firstLogin {
+                  firstLogin{
+                      email,
+                      type,
+                      username,
+                      profilePictureUri
+                  }
+              }
+          `)
+          const { mutate } = useMutation(gql)
+          const res = mutate();
+          console.log(res)
+      }
+      catch (e) {
+            console.log(e, "went wrong here")
+      }
+
   }
 
 

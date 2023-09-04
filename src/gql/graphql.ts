@@ -187,11 +187,13 @@ export type ListFilterInputTypeOfShortUserFilterInput = {
 export type Mutation = {
   __typename?: 'Mutation';
   attendEvent: Event;
+  changeDisplayName: User;
   createEvent: Event;
   deleteUser: Scalars['Boolean']['output'];
   firstLogin: User;
   interestedEvent: Event;
   readNotification: Notification;
+  test: Scalars['Boolean']['output'];
   unattendEvent: Event;
   uninterestedEvent: Event;
   updateEvent: Event;
@@ -204,8 +206,18 @@ export type MutationAttendEventArgs = {
 };
 
 
+export type MutationChangeDisplayNameArgs = {
+  displayName: Scalars['String']['input'];
+};
+
+
 export type MutationCreateEventArgs = {
   input: EventInput;
+};
+
+
+export type MutationFirstLoginArgs = {
+  idToken: Scalars['String']['input'];
 };
 
 
@@ -251,6 +263,41 @@ export type Notification = {
   userId?: Maybe<Scalars['String']['output']>;
 };
 
+export type NotificationFilterInput = {
+  and?: InputMaybe<Array<NotificationFilterInput>>;
+  createdAt?: InputMaybe<DateTimeOperationFilterInput>;
+  eventId?: InputMaybe<ObjectIdOperationFilterInput>;
+  id?: InputMaybe<ObjectIdOperationFilterInput>;
+  isRead?: InputMaybe<BooleanOperationFilterInput>;
+  link?: InputMaybe<StringOperationFilterInput>;
+  message?: InputMaybe<StringOperationFilterInput>;
+  or?: InputMaybe<Array<NotificationFilterInput>>;
+  readAt?: InputMaybe<DateTimeOperationFilterInput>;
+  title?: InputMaybe<StringOperationFilterInput>;
+  userId?: InputMaybe<StringOperationFilterInput>;
+};
+
+export type NotificationSortInput = {
+  createdAt?: InputMaybe<SortEnumType>;
+  eventId?: InputMaybe<SortEnumType>;
+  id?: InputMaybe<SortEnumType>;
+  isRead?: InputMaybe<SortEnumType>;
+  link?: InputMaybe<SortEnumType>;
+  message?: InputMaybe<SortEnumType>;
+  readAt?: InputMaybe<SortEnumType>;
+  title?: InputMaybe<SortEnumType>;
+  userId?: InputMaybe<SortEnumType>;
+};
+
+/** A segment of a collection. */
+export type NotificationsCollectionSegment = {
+  __typename?: 'NotificationsCollectionSegment';
+  /** A flattened list of the items. */
+  items?: Maybe<Array<Notification>>;
+  /** Information to aid in pagination. */
+  pageInfo: CollectionSegmentInfo;
+};
+
 export type ObjectIdOperationFilterInput = {
   eq?: InputMaybe<Scalars['ObjectId']['input']>;
   gt?: InputMaybe<Scalars['ObjectId']['input']>;
@@ -270,7 +317,7 @@ export type Query = {
   __typename?: 'Query';
   event?: Maybe<Event>;
   events?: Maybe<EventsCollectionSegment>;
-  notifications: Array<Notification>;
+  notifications?: Maybe<NotificationsCollectionSegment>;
   user?: Maybe<User>;
   users: Array<User>;
 };
@@ -290,7 +337,10 @@ export type QueryEventsArgs = {
 
 
 export type QueryNotificationsArgs = {
-  idToken: Scalars['String']['input'];
+  order?: InputMaybe<Array<NotificationSortInput>>;
+  skip?: InputMaybe<Scalars['Int']['input']>;
+  take?: InputMaybe<Scalars['Int']['input']>;
+  where?: InputMaybe<NotificationFilterInput>;
 };
 
 
@@ -484,18 +534,6 @@ export type UserTypeOperationFilterInput = {
   nin?: InputMaybe<Array<UserType>>;
 };
 
-export type CreateEventMutationVariables = Exact<{
-  input: EventInput;
-}>;
-
-
-export type CreateEventMutation = { __typename?: 'Mutation', createEvent: { __typename?: 'Event', id?: any | null } };
-
-export type FirstLoginMutationVariables = Exact<{ [key: string]: never; }>;
-
-
-export type FirstLoginMutation = { __typename?: 'Mutation', firstLogin: { __typename?: 'User', email?: string | null, type: UserType, username?: string | null, profilePictureUri?: string | null } };
-
 export type GetUserQueryVariables = Exact<{
   id: Scalars['String']['input'];
 }>;
@@ -516,8 +554,6 @@ export type CreateNewEventMutationVariables = Exact<{
 export type CreateNewEventMutation = { __typename?: 'Mutation', createEvent: { __typename?: 'Event', title: string, location: string, type: EventType, description: string, startDate: any, endDate: any, maxAttendees: number, openToGuests: boolean } };
 
 
-export const CreateEventDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"createEvent"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"input"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"EventInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"createEvent"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"input"},"value":{"kind":"Variable","name":{"kind":"Name","value":"input"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}}]}}]}}]} as unknown as DocumentNode<CreateEventMutation, CreateEventMutationVariables>;
-export const FirstLoginDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"firstLogin"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"firstLogin"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"email"}},{"kind":"Field","name":{"kind":"Name","value":"type"}},{"kind":"Field","name":{"kind":"Name","value":"username"}},{"kind":"Field","name":{"kind":"Name","value":"profilePictureUri"}}]}}]}}]} as unknown as DocumentNode<FirstLoginMutation, FirstLoginMutationVariables>;
 export const GetUserDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"getUser"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"id"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"user"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"uid"},"value":{"kind":"Variable","name":{"kind":"Name","value":"id"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"profilePictureUri"}},{"kind":"Field","name":{"kind":"Name","value":"email"}},{"kind":"Field","name":{"kind":"Name","value":"username"}},{"kind":"Field","name":{"kind":"Name","value":"socials"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"discord"}},{"kind":"Field","name":{"kind":"Name","value":"facebook"}},{"kind":"Field","name":{"kind":"Name","value":"instagram"}},{"kind":"Field","name":{"kind":"Name","value":"linkedIn"}}]}},{"kind":"Field","name":{"kind":"Name","value":"firebaseId"}}]}}]}}]} as unknown as DocumentNode<GetUserQuery, GetUserQueryVariables>;
 export const GetEventsDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"getEvents"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"events"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"items"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"title"}},{"kind":"Field","name":{"kind":"Name","value":"location"}}]}}]}}]}}]} as unknown as DocumentNode<GetEventsQuery, GetEventsQueryVariables>;
 export const CreateNewEventDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"createNewEvent"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"input"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"EventInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"createEvent"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"input"},"value":{"kind":"Variable","name":{"kind":"Name","value":"input"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"title"}},{"kind":"Field","name":{"kind":"Name","value":"location"}},{"kind":"Field","name":{"kind":"Name","value":"type"}},{"kind":"Field","name":{"kind":"Name","value":"description"}},{"kind":"Field","name":{"kind":"Name","value":"startDate"}},{"kind":"Field","name":{"kind":"Name","value":"endDate"}},{"kind":"Field","name":{"kind":"Name","value":"maxAttendees"}},{"kind":"Field","name":{"kind":"Name","value":"openToGuests"}}]}}]}}]} as unknown as DocumentNode<CreateNewEventMutation, CreateNewEventMutationVariables>;

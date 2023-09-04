@@ -1,15 +1,16 @@
 <script setup lang='ts'>
 import { provide } from 'vue'
 import { DefaultApolloClient } from '@vue/apollo-composable'
-import { ApolloClient, ApolloLink, concat, createHttpLink, InMemoryCache } from '@apollo/client'
+import { ApolloClient, ApolloLink, createHttpLink, InMemoryCache } from '@apollo/client'
 import { setContext } from '@apollo/client/link/context'
 import { userStore } from '@/store/stores.ts'
 import Layout from '@/layout/layout.vue'
 
 const cache = new InMemoryCache()
 
+const baseUrl = import.meta.env.VITE_BASE_URL
 const httpLink = createHttpLink({
-  uri: 'http://localhost:5010/graphql',
+  uri: `${baseUrl}/graphql`,
 })
 
 const authMiddleware = setContext(async (operation) => {

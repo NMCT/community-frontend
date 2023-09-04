@@ -12,7 +12,7 @@ import {
   signInWithRedirect,
   getRedirectResult,
   User,
-  OAuthProvider,
+  OAuthProvider, onAuthStateChanged,
 } from 'firebase/auth'
 
 const provider = new OAuthProvider('microsoft.com')
@@ -143,6 +143,17 @@ export const useFirebase = () => {
     throw new Error('no user type')
   }
 
+  const restoreLogin = async (): Promise<User | null> => {
+      console.log("restoreLogin")
+    return new Promise((resolve, reject) => {
+      const auth = getAuth();
+      onAuthStateChanged(auth, (user) => {
+        userStore.firebaseUser = user;
+        resolve(user)
+      });
+    })
+  }
+
   return {
     register,
     login,
@@ -152,5 +163,6 @@ export const useFirebase = () => {
     MicrosoftLogin,
     MicrosoftLoginResult,
     getUserType,
+    restoreLogin,
   }
 }
