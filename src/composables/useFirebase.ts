@@ -123,7 +123,10 @@ export const useFirebase = () => {
       if (!credential) {
         throw { code: 'no credential', message: 'no credential' }
       }
-
+      const accessToken = credential.accessToken
+      if (accessToken) {
+        localStorage.setItem('accessToken', accessToken)
+      }
       return result.user
     } catch (error) {
       const errorCode = error.code
@@ -155,6 +158,36 @@ export const useFirebase = () => {
     })
   }
 
+  const getProfilePicture = async () => {
+    const accessToken = localStorage.getItem('accessToken')
+    if (!accessToken) throw new Error('no access token')
+    lookupMsAzureProfilePhoto(accessToken)
+  }
+
+
+  // private function to get the profile photo from Microsoft Graph
+  const lookupMsAzureProfilePhoto = (accessToken: string) => {
+    fetch('https://graph.microsoft.com/v1.0/me/photo/$value', {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+        'Content-Type': 'image/jpg'
+      }
+    })
+      .then(async function(response) {
+        return await response.blob();
+      })
+      .then(function(blob) {
+        const imageObjectURL = URL.createObjectURL(blob);
+        // imageObjectURL will be e.g. blob:http://localhost:3000/f123c12a-1234-4e30-4321-af32f2c5e5bc
+        // so updating the <img scr=""> will present the image correctly after
+        // this function runs
+        // setProfilePicUrl(imageObjectURL);
+      })
+      .catch(e => console.log('error injecting photo'));
+  };
+
+
+
   return {
     auth,
     firebaseUser,
@@ -167,5 +200,6 @@ export const useFirebase = () => {
     passwordReset,
     register,
     restoreLogin,
+    getProfilePicture,
   }
 }

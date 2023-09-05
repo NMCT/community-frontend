@@ -13,22 +13,17 @@ import '@formkit/themes/genesis'
 import './assets/style.css'
 import App from '@/App.vue'
 
-import { useFirebase } from '@/composables/useFirebase.ts'
+import { useFirebase} from '@/composables/useFirebase.ts'
 import { router } from '@/bootstrap/router.ts'
 import { useFirstLogin } from '@/composables/useFirstLogin'
 
-const { restoreLogin } = useFirebase()
+const { restoreLogin,  getProfilePicture, MicrosoftLoginResult} = useFirebase()
 const { postFirstLogin } = useFirstLogin()
 
 const create = () => {
   postFirstLogin()
-  // MicrosoftLoginResult()
-  //   .then(user => {
-  //     console.log('MicrosoftLoginResult', user)
-  //   })
-  //   .catch(error => {
-  //     console.debug('MicrosoftLoginResult error', error)
-  //   })
+  MicrosoftLoginResult()
+
 
   createApp(App)
     .use(router)
@@ -37,6 +32,11 @@ const create = () => {
     // }))
     .use(plugin, defaultConfig(config))
     .mount('#app')
+
+
+  /// playground
+  getProfilePicture()
+
 }
 
 restoreLogin().then(create)
