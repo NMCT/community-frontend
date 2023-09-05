@@ -1,54 +1,48 @@
 <script setup lang="ts">
-import { ref, defineProps } from 'vue';
-import {useRouter} from "vue-router";
-import {userStore} from "@/store/stores.ts";
-import {useFirebase} from "@/hooks/useFirebase.ts";
-import {useMutation} from "@vue/apollo-composable";
+import { ref, defineProps } from 'vue'
+import { useRouter } from 'vue-router'
+import { userStore } from '@/store/stores.ts'
+import { useFirebase } from '@/hooks/useFirebase.ts'
+import { useMutation } from '@vue/apollo-composable'
 import { graphql } from '@/gql'
-const { login } = useFirebase();
+const { login } = useFirebase()
 
-
-const msg = ref('');
+const msg = ref('')
 const router = useRouter()
 
 // Mutation to register login
-const { mutate: registerLoginMutation } = useMutation(graphql(`
-  mutation registerLogin($idToken: String!) {
-        firstLogin(idToken: $idToken) {
-            id
-            email
-            type
-        }
-    }`))
-
-
-
+const { mutate: registerLoginMutation } = useMutation(
+  graphql(`
+    mutation registerLogin($idToken: String!) {
+      firstLogin(idToken: $idToken) {
+        id
+        email
+        type
+      }
+    }
+  `),
+)
 
 async function registerLogin() {
-
   console.log('registerLogin', userStore.firebaseUser)
-  if (!userStore.firebaseUser) throw new Error('not logged in');
-  const idToken = await userStore.firebaseUser.getIdToken();
-  const mutationResult = await registerLoginMutation({idToken});
+  if (!userStore.firebaseUser) throw new Error('not logged in')
+  const idToken = await userStore.firebaseUser.getIdToken()
+  const mutationResult = await registerLoginMutation({ idToken })
 }
 
 async function submitLogin(data) {
-  msg.value = '';
-  console.log('submitLogin', data);
+  msg.value = ''
+  console.log('submitLogin', data)
   try {
-    await login(data.email, data.password, data.remember);
-    await registerLogin();
+    await login(data.email, data.password, data.remember)
+    await registerLogin()
     await router.push('/events')
   } catch (error) {
-    console.warn('error', error);
-    msg.value = error.message;
+    console.warn('error', error)
+    msg.value = error.message
   }
 }
 </script>
-
-
-
-
 
 <template>
   <h3>Login Als Gast</h3>
@@ -84,3 +78,4 @@ async function submitLogin(data) {
 </template>
 
 <style scoped></style>
+@/composables/useFirebase

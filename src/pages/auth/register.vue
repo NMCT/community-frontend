@@ -1,7 +1,7 @@
 <script lang="ts">
 import Error from '../../components/error.vue'
 import { useFirebase } from '@/hooks/useFirebase.ts'
-const {register} = useFirebase()
+const { register } = useFirebase()
 
 export default {
   components: {
@@ -16,13 +16,13 @@ export default {
     async submitSignup(data: any) {
       const email = data.email
       const password = data.password
-      register(email, password, data.username).then(()=>{
-        this.$router.push('/events')
-      })
-      .catch((error: any) => {
-        this.msg = error.message
-      })
-
+      register(email, password, data.username)
+        .then(() => {
+          this.$router.push('/events')
+        })
+        .catch((error: any) => {
+          this.msg = error.message
+        })
     },
     handleIconClick(node: any) {
       node.props.suffixIcon =
@@ -44,11 +44,11 @@ export default {
       validation="required|email"
     />
     <FormKit
-      type='text'
-      name='username'
-      id='username'
-      label='Gebruikersnaam'
-      validation='required|length:3'
+      type="text"
+      name="username"
+      id="username"
+      label="Gebruikersnaam"
+      validation="required|length:3"
     ></FormKit>
     <FormKit
       type="password"
@@ -80,3 +80,4 @@ export default {
 </template>
 
 <style scoped></style>
+@/composables/useFirebase

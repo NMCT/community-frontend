@@ -1,32 +1,31 @@
-import {createRouter, createWebHistory} from 'vue-router'
+import { createRouter, createWebHistory } from 'vue-router'
 import Home from '@/pages/index.vue'
 import Login from '@/pages/auth/login.vue'
-import {userStore} from '@/store/stores.ts'
-import {useFirebase} from '@/hooks/useFirebase.ts'
+import { userStore } from '@/store/stores.ts'
+import { useFirebase } from '@/composables/useFirebase'
 
-const {logout} = useFirebase();
+const { logout } = useFirebase()
 
 export enum routes {
-    landing = "Landing",
-    events = "Home",
-    login = "Login",
-    register = "Register",
-    passwordReset = "PasswordReset",
-    account = "Account",
-    accountHome = "AccountHome",
-    new = "New",
-    notFound = "404"
-
+  landing = 'Landing',
+  events = 'Home',
+  login = 'Login',
+  register = 'Register',
+  passwordReset = 'PasswordReset',
+  account = 'Account',
+  accountHome = 'AccountHome',
+  new = 'New',
+  notFound = '404',
 }
 
 export const router = createRouter({
   history: createWebHistory(),
   routes: [
-      {
-        path: '/',
-        name: routes.landing,
-        component: () => import('@/pages/landing.vue'),
-      },
+    {
+      path: '/',
+      name: routes.landing,
+      component: () => import('@/pages/landing.vue'),
+    },
     {
       path: '/events',
       name: routes.events,
@@ -55,9 +54,8 @@ export const router = createRouter({
           path: '',
           name: routes.accountHome,
           component: () => import('@/pages/account/index.vue'),
-        }
-      ]
-
+        },
+      ],
     },
     {
       path: '/new',
@@ -72,24 +70,31 @@ export const router = createRouter({
   ],
 })
 
-
-const allowedRoutes: routes[] = [routes.login, routes.register, routes.passwordReset, routes.landing, routes.notFound]
+const allowedRoutes: routes[] = [
+  routes.login,
+  routes.register,
+  routes.passwordReset,
+  routes.landing,
+  routes.notFound,
+]
 router.beforeEach((to, _, next) => {
-    if (!to.name) {
-        next({ name: routes.notFound })
-        return
-    }
-    if (to.path == "/logout"){
-        logout();
-        next({name: routes.events})
-        return
-    }
-    if (userStore.firebaseUser === null && !allowedRoutes.includes(to.name.toString() as routes)) {
-        next({ name: routes.login })
-        return
-    } else if (userStore.firebaseUser !== null && to.name === 'Login') {
-        next({ name: routes.events })
-        return
-    } else next()
+  if (!to.name) {
+    next({ name: routes.notFound })
+    return
+  }
+  if (to.path == '/logout') {
+    logout()
+    next({ name: routes.events })
+    return
+  }
+  if (
+    userStore.firebaseUser === null &&
+    !allowedRoutes.includes(to.name.toString() as routes)
+  ) {
+    next({ name: routes.login })
+    return
+  } else if (userStore.firebaseUser !== null && to.name === 'Login') {
+    next({ name: routes.events })
+    return
+  } else next()
 })
-
