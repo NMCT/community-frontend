@@ -14,7 +14,7 @@ const router = useRouter()
 
 // Mutation to register login
 const { mutate: registerLoginMutation } = useMutation(
-  graphql(gql`
+  graphql(`
     mutation registerLogin($idToken: String!) {
       firstLogin(idToken: $idToken) {
         id
@@ -28,7 +28,9 @@ const { mutate: registerLoginMutation } = useMutation(
 async function registerLogin() {
   console.log('registerLogin', firebaseUser.value)
   if (!firebaseUser.value) throw new Error('not logged in')
-  const idToken = await firebaseUser.value.getIdToken()
+  const user = await firebaseUser.value
+  const idToken = await user?.getIdToken()
+  console.log(idToken)
   const mutationResult = await registerLoginMutation({ idToken })
 }
 

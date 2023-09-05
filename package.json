@@ -24,6 +24,7 @@
     "graphql-tag": "^2.12.6",
     "lodash": "^4.17.21",
     "lodash-es": "^4.17.21",
+    "lucide-vue-next": "^0.274.0",
     "marked": "^6.0.0",
     "vue": "^3.3.4",
     "vue-router": "^4.2.4"
