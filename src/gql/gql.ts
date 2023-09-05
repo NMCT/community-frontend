@@ -13,10 +13,10 @@ import { TypedDocumentNode as DocumentNode } from '@graphql-typed-document-node/
  * Therefore it is highly recommended to use the babel or swc plugin for production.
  */
 const documents = {
-    "\n  mutation registerLogin($idToken: String!) {\n        firstLogin(idToken: $idToken) {\n            id\n            email\n            type\n        }\n    }": types.RegisterLoginDocument,
+    "\n    mutation registerLogin($idToken: String!) {\n      firstLogin(idToken: $idToken) {\n        id\n        email\n        type\n      }\n    }\n  ": types.RegisterLoginDocument,
     "query getUser($id: String!) {\n    user(uid: $id) {\n      id\n      profilePictureUri\n      email\n      username\n      socials {\n        discord\n        facebook\n        instagram\n        linkedIn\n      }\n      firebaseId\n       }\n  }": types.GetUserDocument,
-    "\n       query getEvents {\n            events{\n            items {\n               id,\n               title,\n               location,\n            }\n          }\n       }": types.GetEventsDocument,
-    "\n    mutation createNewEvent($input: EventInput!) {\n        createEvent(input: $input) {\n            title\n            location\n            type\n            description\n            startDate\n            endDate\n            maxAttendees\n            openToGuests\n        }\n    }\n": types.CreateNewEventDocument,
+    "\n    query getEvents {\n      events {\n        items {\n          id\n          title\n          location\n        }\n      }\n    }\n  ": types.GetEventsDocument,
+    "\n  mutation createNewEvent($input: EventInput!) {\n    createEvent(input: $input) {\n      title\n      location\n      type\n      description\n      startDate\n      endDate\n      maxAttendees\n      openToGuests\n    }\n  }\n": types.CreateNewEventDocument,
 };
 
 /**
@@ -36,7 +36,7 @@ export function graphql(source: string): unknown;
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function graphql(source: "\n  mutation registerLogin($idToken: String!) {\n        firstLogin(idToken: $idToken) {\n            id\n            email\n            type\n        }\n    }"): (typeof documents)["\n  mutation registerLogin($idToken: String!) {\n        firstLogin(idToken: $idToken) {\n            id\n            email\n            type\n        }\n    }"];
+export function graphql(source: "\n    mutation registerLogin($idToken: String!) {\n      firstLogin(idToken: $idToken) {\n        id\n        email\n        type\n      }\n    }\n  "): (typeof documents)["\n    mutation registerLogin($idToken: String!) {\n      firstLogin(idToken: $idToken) {\n        id\n        email\n        type\n      }\n    }\n  "];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
@@ -44,11 +44,11 @@ export function graphql(source: "query getUser($id: String!) {\n    user(uid: $i
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function graphql(source: "\n       query getEvents {\n            events{\n            items {\n               id,\n               title,\n               location,\n            }\n          }\n       }"): (typeof documents)["\n       query getEvents {\n            events{\n            items {\n               id,\n               title,\n               location,\n            }\n          }\n       }"];
+export function graphql(source: "\n    query getEvents {\n      events {\n        items {\n          id\n          title\n          location\n        }\n      }\n    }\n  "): (typeof documents)["\n    query getEvents {\n      events {\n        items {\n          id\n          title\n          location\n        }\n      }\n    }\n  "];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function graphql(source: "\n    mutation createNewEvent($input: EventInput!) {\n        createEvent(input: $input) {\n            title\n            location\n            type\n            description\n            startDate\n            endDate\n            maxAttendees\n            openToGuests\n        }\n    }\n"): (typeof documents)["\n    mutation createNewEvent($input: EventInput!) {\n        createEvent(input: $input) {\n            title\n            location\n            type\n            description\n            startDate\n            endDate\n            maxAttendees\n            openToGuests\n        }\n    }\n"];
+export function graphql(source: "\n  mutation createNewEvent($input: EventInput!) {\n    createEvent(input: $input) {\n      title\n      location\n      type\n      description\n      startDate\n      endDate\n      maxAttendees\n      openToGuests\n    }\n  }\n"): (typeof documents)["\n  mutation createNewEvent($input: EventInput!) {\n    createEvent(input: $input) {\n      title\n      location\n      type\n      description\n      startDate\n      endDate\n      maxAttendees\n      openToGuests\n    }\n  }\n"];
 
 export function graphql(source: string) {
   return (documents as any)[source] ?? {};

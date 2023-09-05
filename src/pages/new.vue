@@ -4,7 +4,7 @@ import { useMutation } from '@vue/apollo-composable'
 import Editor from '@/components/markdown/editor.vue'
 import { onMounted, ref } from 'vue'
 import Switch from '@/components/headlessui/switch.vue'
-import { useFirebase } from '@/hooks/useFirebase.ts'
+import { useFirebase } from '@/composables/useFirebase.ts'
 
 const gql = graphql(`
   mutation createNewEvent($input: EventInput!) {

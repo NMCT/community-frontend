@@ -12,12 +12,17 @@ import App from '@/App.vue'
 
 import { useFirebase } from '@/composables/useFirebase.ts'
 import { router } from '@/bootstrap/router.ts'
+import { useFirstLogin } from '@/composables/useFirstLogin.ts'
 
 library.add(faSpinner)
 
-const { restoreLogin } = useFirebase()
-
+const { restoreLogin, MicrosoftLoginResult } = useFirebase()
+const { postFirstLogin } = useFirstLogin()
 await restoreLogin()
+postFirstLogin()
+MicrosoftLoginResult().then(user => {
+  console.log('MicrosoftLoginResult', user)
+})
 
 createApp(App)
   .use(router)

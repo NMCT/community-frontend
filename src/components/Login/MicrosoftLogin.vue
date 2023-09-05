@@ -1,5 +1,5 @@
 <script lang="ts">
-import { useFirebase } from '@/hooks/useFirebase.ts'
+import { useFirebase } from '@/composables/useFirebase.ts'
 import { onMounted } from 'vue'
 
 const { MicrosoftLogin, MicrosoftLoginResult } = useFirebase()
@@ -33,4 +33,3 @@ export default {
 </template>
 
 <style scoped></style>
-@/composables/useFirebase

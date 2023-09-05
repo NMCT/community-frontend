@@ -2,7 +2,7 @@
 import { ref, defineProps } from 'vue'
 import { useRouter } from 'vue-router'
 import { userStore } from '@/store/stores.ts'
-import { useFirebase } from '@/hooks/useFirebase.ts'
+import { useFirebase } from '@/composables/useFirebase.ts'
 import { useMutation } from '@vue/apollo-composable'
 import { graphql } from '@/gql'
 const { login } = useFirebase()

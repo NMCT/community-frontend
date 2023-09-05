@@ -84,7 +84,7 @@ router.beforeEach((to, _, next) => {
   }
   if (to.path == '/logout') {
     logout()
-    next({ name: routes.events })
+    next({ name: routes.login })
     return
   }
   if (

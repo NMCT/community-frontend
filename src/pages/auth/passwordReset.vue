@@ -1,5 +1,5 @@
 <script lang="ts">
-import { useFirebase } from '@/hooks/useFirebase.ts'
+import { useFirebase } from '@/composables/useFirebase.ts'
 
 const { passwordReset } = useFirebase()
 export default {
