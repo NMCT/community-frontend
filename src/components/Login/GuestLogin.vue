@@ -1,10 +1,11 @@
 <script setup lang="ts">
-import { ref, defineProps } from 'vue'
+import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { userStore } from '@/store/stores.ts'
-import { useFirebase } from '@/hooks/useFirebase.ts'
+import { useFirebase } from '@/composables/useFirebase.ts'
 import { useMutation } from '@vue/apollo-composable'
 import { graphql } from '@/gql'
+import gql from 'graphql-tag'
 const { login } = useFirebase()
 
 const msg = ref('')
@@ -12,7 +13,7 @@ const router = useRouter()
 
 // Mutation to register login
 const { mutate: registerLoginMutation } = useMutation(
-  graphql(`
+  graphql(gql`
     mutation registerLogin($idToken: String!) {
       firstLogin(idToken: $idToken) {
         id
@@ -76,6 +77,3 @@ async function submitLogin(data) {
     <router-link to="/register">Nog geen gast account? Registreer</router-link>
   </p>
 </template>
-
-<style scoped></style>
-@/composables/useFirebase
