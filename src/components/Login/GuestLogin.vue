@@ -1,12 +1,13 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
-import { userStore } from '@/store/stores.ts'
 import { useFirebase } from '@/composables/useFirebase.ts'
 import { useMutation } from '@vue/apollo-composable'
 import { graphql } from '@/gql'
 import gql from 'graphql-tag'
-const { login } = useFirebase()
+import Error from '@/components/error.vue'
+
+const { login, firebaseUser } = useFirebase()
 
 const msg = ref('')
 const router = useRouter()
@@ -25,9 +26,9 @@ const { mutate: registerLoginMutation } = useMutation(
 )
 
 async function registerLogin() {
-  console.log('registerLogin', userStore.firebaseUser)
-  if (!userStore.firebaseUser) throw new Error('not logged in')
-  const idToken = await userStore.firebaseUser.getIdToken()
+  console.log('registerLogin', firebaseUser.value)
+  if (!firebaseUser.value) throw new Error('not logged in')
+  const idToken = await firebaseUser.value.getIdToken()
   const mutationResult = await registerLoginMutation({ idToken })
 }
 

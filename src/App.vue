@@ -1,10 +1,17 @@
-<script setup lang='ts'>
+<script setup lang="ts">
 import { provide } from 'vue'
 import { DefaultApolloClient } from '@vue/apollo-composable'
-import { ApolloClient, ApolloLink, createHttpLink, InMemoryCache } from '@apollo/client'
+import {
+  ApolloClient,
+  ApolloLink,
+  createHttpLink,
+  InMemoryCache,
+} from '@apollo/client'
 import { setContext } from '@apollo/client/link/context'
-import { userStore } from '@/store/stores.ts'
 import Layout from '@/layout/layout.vue'
+import { useFirebase } from '@/composables/useFirebase.ts'
+
+const { firebaseUser } = useFirebase()
 
 const cache = new InMemoryCache()
 
@@ -13,9 +20,9 @@ const httpLink = createHttpLink({
   uri: `${baseUrl}/graphql`,
 })
 
-const authMiddleware = setContext(async (operation) => {
-  if (!userStore.firebaseUser) throw new Error('not logged in')
-  const token = await userStore.firebaseUser.getIdToken()
+const authMiddleware = setContext(async operation => {
+  if (!firebaseUser.value) throw new Error('not logged in')
+  const token = await firebaseUser.value.getIdToken()
   return {
     headers: {
       authorization: token ? `Bearer ${token}` : '',

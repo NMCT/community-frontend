@@ -1,10 +1,9 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import Home from '@/pages/index.vue'
 import Login from '@/pages/auth/login.vue'
-import { userStore } from '@/store/stores.ts'
 import { useFirebase } from '@/composables/useFirebase'
 
-const { logout } = useFirebase()
+const { logout, firebaseUser } = useFirebase()
 
 export enum routes {
   landing = 'Landing',
@@ -25,26 +24,44 @@ export const router = createRouter({
       path: '/',
       name: routes.landing,
       component: () => import('@/pages/landing.vue'),
+      meta: {
+        requiresAuth: false,
+      },
     },
     {
       path: '/events',
       name: routes.events,
       component: Home,
+      meta: {
+        requiresAuth: true,
+      },
     },
     {
       path: '/login',
       name: routes.login,
       component: Login,
+      meta: {
+        requiresAuth: false,
+        avoidAuth: true,
+      },
     },
     {
       path: '/register',
       name: routes.register,
       component: () => import('@/pages/auth/register.vue'),
+      meta: {
+        requiresAuth: false,
+        avoidAuth: true,
+      },
     },
     {
       path: '/password-reset',
       name: routes.passwordReset,
       component: () => import('@/pages/auth/passwordReset.vue'),
+      meta: {
+        requiresAuth: false,
+        avoidAuth: false,
+      },
     },
     {
       path: '/account',
@@ -56,27 +73,29 @@ export const router = createRouter({
           component: () => import('@/pages/account/index.vue'),
         },
       ],
+      meta: {
+        requiresAuth: true,
+      },
     },
     {
       path: '/new',
       name: routes.new,
       component: () => import('@/pages/new.vue'),
+      meta: {
+        requiresAuth: true,
+      },
     },
     {
       path: '/:pathMatch(.*)*',
       name: routes.notFound,
       component: () => import('@/pages/404.vue'),
+      meta: {
+        requiresAuth: false,
+      },
     },
   ],
 })
 
-const allowedRoutes: routes[] = [
-  routes.login,
-  routes.register,
-  routes.passwordReset,
-  routes.landing,
-  routes.notFound,
-]
 router.beforeEach((to, _, next) => {
   if (!to.name) {
     next({ name: routes.notFound })
@@ -87,13 +106,10 @@ router.beforeEach((to, _, next) => {
     next({ name: routes.login })
     return
   }
-  if (
-    userStore.firebaseUser === null &&
-    !allowedRoutes.includes(to.name.toString() as routes)
-  ) {
+  if (firebaseUser.value === null && to.meta.requiresAuth) {
     next({ name: routes.login })
     return
-  } else if (userStore.firebaseUser !== null && to.name === 'Login') {
+  } else if (firebaseUser.value !== null && to.meta.avoidAuth) {
     next({ name: routes.events })
     return
   } else next()

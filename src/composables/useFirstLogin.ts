@@ -1,11 +1,13 @@
-import { userStore } from '@/store/stores.ts'
+import { useFirebase } from '@/composables/useFirebase.ts'
+
+const { firebaseUser } = useFirebase()
 
 export function useFirstLogin() {
   const baseUrl = import.meta.env.VITE_BASE_URL
   console.log(baseUrl)
   const postFirstLogin = async () => {
-    if (!userStore.firebaseUser) return
-    const idString = await userStore.firebaseUser.getIdToken()
+    if (!firebaseUser.value) return
+    const idString = await firebaseUser.value.getIdToken()
 
     fetch(baseUrl + '/api/user/first-login', {
       method: 'POST',

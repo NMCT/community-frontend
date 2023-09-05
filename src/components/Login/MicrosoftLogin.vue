@@ -1,6 +1,5 @@
 <script lang="ts">
 import { useFirebase } from '@/composables/useFirebase.ts'
-import { onMounted } from 'vue'
 
 const { MicrosoftLogin, MicrosoftLoginResult } = useFirebase()
 export default {
@@ -16,11 +15,11 @@ export default {
     },
   },
   setup() {
-    onMounted(() => {
-      MicrosoftLoginResult().catch((error: any) => {
-        console.warn('error while checking microsoft login', error)
-      })
-    })
+    // onMounted(() => {
+    //   MicrosoftLoginResult().catch((error: any) => {
+    //     console.warn('error while checking microsoft login', error)
+    //   })
+    // })
   },
 }
 </script>

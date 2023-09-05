@@ -4,17 +4,18 @@ import {
   browserSessionPersistence,
   createUserWithEmailAndPassword,
   getAuth,
-  setPersistence,
-  signInWithEmailAndPassword,
-  updateProfile,
-  signOut,
-  sendPasswordResetEmail,
-  signInWithRedirect,
   getRedirectResult,
-  User,
   OAuthProvider,
   onAuthStateChanged,
+  sendPasswordResetEmail,
+  setPersistence,
+  signInWithEmailAndPassword,
+  signInWithRedirect,
+  signOut,
+  updateProfile,
+  User,
 } from 'firebase/auth'
+import { ref } from 'vue'
 
 const microsoftProvider = new OAuthProvider('microsoft.com')
 
@@ -26,8 +27,6 @@ microsoftProvider.setCustomParameters({
   // Target specific email with login hint.
   // login_hint: 'user@student.howest.be',
 })
-
-import { userStore } from '../store/stores.ts'
 
 const app: FirebaseApp = initializeApp({
   apiKey: import.meta.env.VITE_apiKey,
@@ -44,6 +43,11 @@ const auth: Auth = getAuth(app)
 setPersistence(auth, browserSessionPersistence)
   .then(r => console.log('setPersistence', r))
   .catch(e => console.log('setPersistence', e))
+
+// region refs
+
+const firebaseUser = ref<User | null>(null)
+// endregion
 
 export const useFirebase = () => {
   const register = async (
@@ -72,7 +76,7 @@ export const useFirebase = () => {
         .then(userCredential => {
           // Signed in
           const user = userCredential.user
-          userStore.firebaseUser = user
+          firebaseUser.value = user
           setTimeout(() => {
             resolve(user)
           })
@@ -109,28 +113,23 @@ export const useFirebase = () => {
     await signInWithRedirect(auth, microsoftProvider)
   }
   const MicrosoftLoginResult = async (): Promise<User> => {
-    new Promise((resolve, reject) => {
-      getRedirectResult(auth)
-        .then(result => {
-          if (!result) reject({ code: 'no result', message: 'no result' })
-          else {
-            const credential = OAuthProvider.credentialFromResult(result)
-            if (!credential) {
-              reject({ code: 'no credential', message: 'no credential' })
-              return
-            }
-            // const accessToken = credential.accessToken
-            // const idToken = credential.idToken
-            const user = result.user
-            resolve(user)
-          }
-        })
-        .catch(error => {
-          const errorCode = error.code
-          const errorMessage = error.message
-          reject({ code: errorCode, message: errorMessage })
-        })
-    })
+    try {
+      const result = await getRedirectResult(auth)
+      if (!result) {
+        throw { code: 'no result', message: 'no result' }
+      }
+
+      const credential = OAuthProvider.credentialFromResult(result)
+      if (!credential) {
+        throw { code: 'no credential', message: 'no credential' }
+      }
+
+      return result.user
+    } catch (error) {
+      const errorCode = error.code
+      const errorMessage = error.message
+      throw { code: errorCode, message: errorMessage }
+    }
   }
 
   const getUserType = async (): Promise<string> => {
@@ -141,9 +140,8 @@ export const useFirebase = () => {
     if (claims === undefined) throw new Error('no claims')
     console.log({ claims })
     if (claims.Admin === true) return 'Admin'
-    if (claims.User === true) return 'User'
-    if (claims.Guest === true) return 'Guest'
-    throw new Error('no user type')
+    if (claims.firebase?.sign_in_provider === 'microsoft.com') return 'User'
+    return 'Guest'
   }
 
   const restoreLogin = async (): Promise<User | null> => {
@@ -151,21 +149,23 @@ export const useFirebase = () => {
     return new Promise((resolve, reject) => {
       const auth = getAuth()
       onAuthStateChanged(auth, user => {
-        userStore.firebaseUser = user
+        firebaseUser.value = user
         resolve(user)
       })
     })
   }
 
   return {
-    register,
-    login,
     auth,
-    logout,
-    passwordReset,
+    firebaseUser,
+
     MicrosoftLogin,
     MicrosoftLoginResult,
     getUserType,
+    login,
+    logout,
+    passwordReset,
+    register,
     restoreLogin,
   }
 }

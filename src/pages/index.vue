@@ -3,9 +3,11 @@ import { useQuery } from '@vue/apollo-composable'
 import { graphql } from '@/gql'
 import { EventInput } from '@/gql/graphql.ts'
 import { ref, watch } from 'vue'
-import { userStore } from '@/store/stores.ts'
+import { useFirebase } from '@/composables/useFirebase.ts'
 
-console.log(userStore.firebaseUser.uid)
+const { firebaseUser } = useFirebase()
+
+console.log(firebaseUser.value?.uid)
 
 const { result, loading, error } = useQuery(
   graphql(`
@@ -25,7 +27,7 @@ console.log(result)
 const input = ref<EventInput | null>(null)
 const token = ref<string>()
 
-if (!userStore.firebaseUser) throw new Error()
+if (!firebaseUser.value) throw new Error()
 
 watch(token, async () => {
   console.log('your token', token.value)

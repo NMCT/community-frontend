@@ -1,6 +1,7 @@
 <script lang="ts">
 import Error from '../../components/error.vue'
 import { useFirebase } from '@/composables/useFirebase.ts'
+
 const { register } = useFirebase()
 
 export default {
