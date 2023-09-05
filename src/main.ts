@@ -2,11 +2,13 @@ import { createApp } from 'vue'
 
 // Uno css framework
 import 'virtual:uno.css'
-import '@unocss/reset/normalize.css'
+import '@unocss/reset/tailwind.css'
 
-
+// formkit
 import { defaultConfig, plugin } from '@formkit/vue'
 import config from '../formkit.config.ts'
+import '@formkit/themes/genesis'
+
 
 import './assets/style.css'
 import App from '@/App.vue'

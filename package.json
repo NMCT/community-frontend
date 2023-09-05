@@ -13,7 +13,7 @@
     "@apollo/client": "^3.7.17",
     "@formkit/auto-animate": "^0.7.0",
     "@formkit/icons": "^0.17.4",
-    "@formkit/themes": "^0.17.4",
+    "@formkit/themes": "^0.17.5",
     "@formkit/vue": "^0.17.4",
     "@headlessui/vue": "^1.7.14",
     "@unocss/reset": "^0.55.7",
