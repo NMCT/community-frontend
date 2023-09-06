@@ -18,6 +18,7 @@ export type Scalars = {
   DateTime: { input: any; output: any; }
   /** The ObjectId scalar type represents a 12 byte ObjectId, represented as UTF-8 character sequences. */
   ObjectId: { input: any; output: any; }
+  URL: { input: any; output: any; }
 };
 
 export enum ApplyPolicy {
@@ -58,6 +59,7 @@ export type DateTimeOperationFilterInput = {
 export type Event = {
   __typename?: 'Event';
   attendees?: Maybe<Array<ShortUser>>;
+  audience?: Maybe<Scalars['String']['output']>;
   createdOn?: Maybe<Scalars['DateTime']['output']>;
   description: Scalars['String']['output'];
   endDate: Scalars['DateTime']['output'];
@@ -76,6 +78,7 @@ export type Event = {
 export type EventFilterInput = {
   and?: InputMaybe<Array<EventFilterInput>>;
   attendees?: InputMaybe<ListFilterInputTypeOfShortUserFilterInput>;
+  audience?: InputMaybe<StringOperationFilterInput>;
   createdOn?: InputMaybe<DateTimeOperationFilterInput>;
   description?: InputMaybe<StringOperationFilterInput>;
   endDate?: InputMaybe<DateTimeOperationFilterInput>;
@@ -94,6 +97,7 @@ export type EventFilterInput = {
 
 export type EventInput = {
   attendees?: InputMaybe<Array<ShortUserInput>>;
+  audience?: InputMaybe<Scalars['String']['input']>;
   createdOn?: InputMaybe<Scalars['DateTime']['input']>;
   description: Scalars['String']['input'];
   endDate: Scalars['DateTime']['input'];
@@ -110,6 +114,7 @@ export type EventInput = {
 };
 
 export type EventSortInput = {
+  audience?: InputMaybe<SortEnumType>;
   createdOn?: InputMaybe<SortEnumType>;
   description?: InputMaybe<SortEnumType>;
   endDate?: InputMaybe<SortEnumType>;
@@ -392,33 +397,33 @@ export type ShortUserSortInput = {
 
 export type Socials = {
   __typename?: 'Socials';
-  discord?: Maybe<Scalars['String']['output']>;
-  facebook?: Maybe<Scalars['String']['output']>;
-  instagram?: Maybe<Scalars['String']['output']>;
-  linkedIn?: Maybe<Scalars['String']['output']>;
+  discord: Scalars['String']['output'];
+  facebook: Scalars['URL']['output'];
+  instagram: Scalars['URL']['output'];
+  linkedIn: Scalars['URL']['output'];
 };
 
 export type SocialsFilterInput = {
   and?: InputMaybe<Array<SocialsFilterInput>>;
   discord?: InputMaybe<StringOperationFilterInput>;
-  facebook?: InputMaybe<StringOperationFilterInput>;
-  instagram?: InputMaybe<StringOperationFilterInput>;
-  linkedIn?: InputMaybe<StringOperationFilterInput>;
+  facebook?: InputMaybe<UrlOperationFilterInput>;
+  instagram?: InputMaybe<UrlOperationFilterInput>;
+  linkedIn?: InputMaybe<UrlOperationFilterInput>;
   or?: InputMaybe<Array<SocialsFilterInput>>;
 };
 
 export type SocialsInput = {
-  discord?: InputMaybe<Scalars['String']['input']>;
-  facebook?: InputMaybe<Scalars['String']['input']>;
-  instagram?: InputMaybe<Scalars['String']['input']>;
-  linkedIn?: InputMaybe<Scalars['String']['input']>;
+  discord: Scalars['String']['input'];
+  facebook: Scalars['URL']['input'];
+  instagram: Scalars['URL']['input'];
+  linkedIn: Scalars['URL']['input'];
 };
 
 export type SocialsSortInput = {
   discord?: InputMaybe<SortEnumType>;
-  facebook?: InputMaybe<SortEnumType>;
-  instagram?: InputMaybe<SortEnumType>;
-  linkedIn?: InputMaybe<SortEnumType>;
+  facebook?: InputMaybe<UriSortInput>;
+  instagram?: InputMaybe<UriSortInput>;
+  linkedIn?: InputMaybe<UriSortInput>;
 };
 
 export enum SortEnumType {
@@ -452,6 +457,45 @@ export enum UpdateAudience {
   Interested = 'INTERESTED',
   None = 'NONE'
 }
+
+export type UriSortInput = {
+  absolutePath?: InputMaybe<SortEnumType>;
+  absoluteUri?: InputMaybe<SortEnumType>;
+  authority?: InputMaybe<SortEnumType>;
+  dnsSafeHost?: InputMaybe<SortEnumType>;
+  fragment?: InputMaybe<SortEnumType>;
+  host?: InputMaybe<SortEnumType>;
+  hostNameType?: InputMaybe<SortEnumType>;
+  idnHost?: InputMaybe<SortEnumType>;
+  isAbsoluteUri?: InputMaybe<SortEnumType>;
+  isDefaultPort?: InputMaybe<SortEnumType>;
+  isFile?: InputMaybe<SortEnumType>;
+  isLoopback?: InputMaybe<SortEnumType>;
+  isUnc?: InputMaybe<SortEnumType>;
+  localPath?: InputMaybe<SortEnumType>;
+  originalString?: InputMaybe<SortEnumType>;
+  pathAndQuery?: InputMaybe<SortEnumType>;
+  port?: InputMaybe<SortEnumType>;
+  query?: InputMaybe<SortEnumType>;
+  scheme?: InputMaybe<SortEnumType>;
+  userEscaped?: InputMaybe<SortEnumType>;
+  userInfo?: InputMaybe<SortEnumType>;
+};
+
+export type UrlOperationFilterInput = {
+  eq?: InputMaybe<Scalars['URL']['input']>;
+  gt?: InputMaybe<Scalars['URL']['input']>;
+  gte?: InputMaybe<Scalars['URL']['input']>;
+  in?: InputMaybe<Array<InputMaybe<Scalars['URL']['input']>>>;
+  lt?: InputMaybe<Scalars['URL']['input']>;
+  lte?: InputMaybe<Scalars['URL']['input']>;
+  neq?: InputMaybe<Scalars['URL']['input']>;
+  ngt?: InputMaybe<Scalars['URL']['input']>;
+  ngte?: InputMaybe<Scalars['URL']['input']>;
+  nin?: InputMaybe<Array<InputMaybe<Scalars['URL']['input']>>>;
+  nlt?: InputMaybe<Scalars['URL']['input']>;
+  nlte?: InputMaybe<Scalars['URL']['input']>;
+};
 
 export type User = {
   __typename?: 'User';
@@ -519,7 +563,7 @@ export type GetUserQueryVariables = Exact<{
 }>;
 
 
-export type GetUserQuery = { __typename?: 'Query', user?: { __typename?: 'User', id?: any | null, profilePictureUri?: string | null, email?: string | null, username?: string | null, firebaseId: string, socials?: { __typename?: 'Socials', discord?: string | null, facebook?: string | null, instagram?: string | null, linkedIn?: string | null } | null } | null };
+export type GetUserQuery = { __typename?: 'Query', user?: { __typename?: 'User', id?: any | null, profilePictureUri?: string | null, email?: string | null, username?: string | null, firebaseId: string, socials?: { __typename?: 'Socials', discord: string, facebook: any, instagram: any, linkedIn: any } | null } | null };
 
 export type ChangeUserNameMutationVariables = Exact<{
   username: Scalars['String']['input'];
@@ -533,7 +577,7 @@ export type ChangeSocialsMutationVariables = Exact<{
 }>;
 
 
-export type ChangeSocialsMutation = { __typename?: 'Mutation', updateSocials: { __typename?: 'User', id?: any | null, socials?: { __typename?: 'Socials', discord?: string | null, facebook?: string | null, instagram?: string | null, linkedIn?: string | null } | null } };
+export type ChangeSocialsMutation = { __typename?: 'Mutation', updateSocials: { __typename?: 'User', id?: any | null, socials?: { __typename?: 'Socials', discord: string, facebook: any, instagram: any, linkedIn: any } | null } };
 
 export type GetEventsQueryVariables = Exact<{ [key: string]: never; }>;
 

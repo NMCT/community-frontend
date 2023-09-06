@@ -1,6 +1,26 @@
-<script setup>
+<script setup lang="ts">
 import WrapBalancer from 'vue-wrap-balancer'
 import CallToAction from '@/components/elements/CtaBold.vue'
+import CtaSubtile from '@/components/elements/CtaSubtile.vue'
+import Event from '@/components/cards/Event.vue'
+import { Event as IEvent } from '@/gql/graphql'
+
+const mockupEvent: IEvent = {
+  id: '1',
+  title: 'Event title',
+  description: 'Event description',
+  location: 'Event location',
+  audience: 'Event audience',
+  startDate: 'Event start date',
+  endDate: 'Event end date',
+  attendees: [],
+  organizer: {
+    uid: 'Organizer uid',
+    name: 'Organizer name',
+    email: 'Organizer email',
+    profilePicture: 'Organizer profile picture uri',
+  },
+}
 </script>
 
 <template>
@@ -69,6 +89,10 @@ import CallToAction from '@/components/elements/CtaBold.vue'
     <div class="mt-8 text-center text-lg">
       Events to help you to become a better version of you.
     </div>
+    <Event :event="mockupEvent"></Event>
+    <CtaSubtile>
+      <span>Check out all events</span>
+    </CtaSubtile>
   </section>
 </template>
 

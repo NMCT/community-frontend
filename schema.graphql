@@ -16,6 +16,7 @@ type CollectionSegmentInfo {
 
 type Event {
     attendees: [ShortUser!]
+    audience: String
     createdOn: DateTime
     description: String!
     endDate: DateTime!
@@ -91,10 +92,10 @@ type ShortUser {
 }
 
 type Socials {
-    discord: String
-    facebook: URL
-    instagram: URL
-    linkedIn: URL
+    discord: String!
+    facebook: URL!
+    instagram: URL!
+    linkedIn: URL!
 }
 
 type Subscription {
@@ -172,6 +173,7 @@ input DateTimeOperationFilterInput {
 input EventFilterInput {
     and: [EventFilterInput!]
     attendees: ListFilterInputTypeOfShortUserFilterInput
+    audience: StringOperationFilterInput
     createdOn: DateTimeOperationFilterInput
     description: StringOperationFilterInput
     endDate: DateTimeOperationFilterInput
@@ -190,6 +192,7 @@ input EventFilterInput {
 
 input EventInput {
     attendees: [ShortUserInput!]
+    audience: String
     createdOn: DateTime
     description: String!
     endDate: DateTime!
@@ -206,6 +209,7 @@ input EventInput {
 }
 
 input EventSortInput {
+    audience: SortEnumType
     createdOn: SortEnumType
     description: SortEnumType
     endDate: SortEnumType
@@ -339,10 +343,10 @@ input SocialsFilterInput {
 }
 
 input SocialsInput {
-    discord: String
-    facebook: URL
-    instagram: URL
-    linkedIn: URL
+    discord: String!
+    facebook: URL!
+    instagram: URL!
+    linkedIn: URL!
 }
 
 input SocialsSortInput {

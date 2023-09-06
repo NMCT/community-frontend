@@ -1,7 +1,7 @@
 <script setup lang="ts"></script>
 
 <template>
-  <button class="text-secondary-700 underline">
+  <button class="text-secondary-700 font-title underline">
     <slot />
   </button>
 </template>
