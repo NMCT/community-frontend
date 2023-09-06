@@ -1,7 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import Home from '@/pages/index.vue'
 import Login from '@/pages/auth/login.vue'
-import { useFirebase } from '@/composables/useFirebase'
+import { useFirebase } from '@/composables/useFirebase.ts'
 
 const { logout, firebaseUser } = useFirebase()
 
