@@ -51,6 +51,7 @@ type Mutation {
     unattendEvent(eventId: String!): Event!
     uninterestedEvent(eventId: String!): Event!
     updateEvent(update: EventUpdateInput!): Event!
+    updateProfilePictureUri(uri: String!): Boolean!
     updateSocials(socials: SocialsInput!): User!
 }
 
@@ -90,10 +91,10 @@ type ShortUser {
 }
 
 type Socials {
-    discord: String!
-    facebook: URL!
-    instagram: URL!
-    linkedIn: URL!
+    discord: String
+    facebook: URL
+    instagram: URL
+    linkedIn: URL
 }
 
 type Subscription {
@@ -338,10 +339,10 @@ input SocialsFilterInput {
 }
 
 input SocialsInput {
-    discord: String!
-    facebook: URL!
-    instagram: URL!
-    linkedIn: URL!
+    discord: String
+    facebook: URL
+    instagram: URL
+    linkedIn: URL
 }
 
 input SocialsSortInput {

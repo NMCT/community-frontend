@@ -27,7 +27,8 @@
     "lucide-vue-next": "^0.274.0",
     "marked": "^6.0.0",
     "vue": "^3.3.4",
-    "vue-router": "^4.2.4"
+    "vue-router": "^4.2.4",
+    "vue-wrap-balancer": "^1.1.3"
   },
   "devDependencies": {
     "@graphql-codegen/cli": "5.0.0",

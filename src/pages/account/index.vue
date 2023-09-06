@@ -1,8 +1,9 @@
 <script setup lang="ts">
 import { graphql } from '@/gql'
-import { useQuery } from '@vue/apollo-composable'
+import { useMutation, useQuery } from '@vue/apollo-composable'
 import { computed, ref, watch } from 'vue'
 import { useFirebase } from '@/composables/useFirebase.ts'
+import { Socials, User } from '@/gql/graphql.ts'
 
 const { firebaseUser } = useFirebase()
 
@@ -25,20 +26,78 @@ const query = graphql(`
     }
   }
 `)
-const edit = ref(true)
-const { result, loading, error } = useQuery(query, {
+
+const changeUserNameGql = graphql(`
+  mutation changeUserName($username: String!) {
+    changeDisplayName(displayName: $username) {
+      id
+      username
+    }
+  }
+`)
+
+const { mutate: changeUserName } = useMutation(changeUserNameGql)
+
+const changeSocialsGql = graphql(`
+  mutation changeSocials($socials: SocialsInput!) {
+    updateSocials(socials: $socials) {
+      id
+      socials {
+        discord
+        facebook
+        instagram
+        linkedIn
+      }
+    }
+  }
+`)
+
+const { mutate: changeSocials } = useMutation(changeSocialsGql)
+
+interface iUser {
+  user: User
+}
+
+const edit = ref(false)
+const { result, loading, error } = useQuery<iUser>(query, {
   id: uid!,
 })
-watch(result, () => {
-  console.log(result.value)
+
+const user = computed(() => {
+  if (result.value) {
+    return result.value.user as User
+  }
 })
 
-const profilePictureUri = computed(() => {
-  return (
-    result.value.user.profilePictureUri ??
-    'https://st3.depositphotos.com/6672868/13701/v/450/depositphotos_137014128-stock-illustration-user-profile-icon.jpg'
-  )
-})
+const submitForm = async (e: any) => {
+  if (e.instagram) {
+    e.instagram = e.instagram.replace('@', '')
+    e.instagram = e.instagram.replace('https://www.instagram.com/', '')
+  }
+  if (e.facebook) {
+    e.facebook = e.facebook.replace('https://www.facebook.com/', '')
+  }
+
+  const socials: Socials = {
+    discord: e.Discord ?? '',
+    facebook: e.Facebook ?? null,
+    instagram: e.Instagram ?? null,
+    linkedIn: e.LinkedIn ?? null,
+  }
+  const username = e.username
+
+  if (username !== user.value?.username) {
+    await changeUserName({ username })
+  }
+
+  if (socials !== user.value?.socials) {
+    await changeSocials({ socials })
+  }
+
+  edit.value = false
+}
+
+console.log(user, loading)
 </script>
 
 <template>
@@ -50,61 +109,67 @@ const profilePictureUri = computed(() => {
       {{ edit ? 'Save' : 'Edit' }}
     </button>
 
-    <div v-if="loading">
-      <font-awesome-icon icon="spinner" spin />
-    </div>
-    <div v-else-if="result && !edit">
+    <!--    Todo: replace with loading icon-->
+    <div v-if="loading">Loading...</div>
+    <div v-else-if="!edit && user">
       <div>
-        {{ result.user.username ?? 'No username' }}
+        {{ user.username ?? 'No username' }}
       </div>
       <div>
-        {{ result.user.email }}
+        {{ user.email }}
       </div>
       <img
-        :src="profilePictureUri"
+        v-if="user"
+        :src="
+          user.profilePictureUri ??
+          'https://st3.depositphotos.com/6672868/13701/v/450/depositphotos_137014128-stock-illustration-user-profile-icon.jpg'
+        "
         alt="Your profile picture"
         class="h24 w-24 rounded-full"
       />
-      <div
-        v-for="socialKey in result.user.socials"
-        :key="result.user.socials[socialKey]"
-      >
+      <div v-for="socialKey in user.socials" :key="user.socials[socialKey]">
         <div>
           {{ socialKey }}
         </div>
         <div>
-          {{ result.user.socials[socialKey] }}
+          {{ user.socials[socialKey] }}
         </div>
       </div>
     </div>
-    <div v-if="edit == true">
+    <div v-if="edit">
       <div>Editing...</div>
-      <FormKit type="form">
-        <div>{{ result?.user?.email ?? '' }}</div>
-        <FormKit type="text" name="username" label="Username" />
+      <FormKit type="form" @submit="submitForm">
+        <div>{{ user?.email ?? '' }}</div>
+        <FormKit
+          type="text"
+          name="username"
+          label="Username"
+          :value="user?.username"
+        />
         <FormKit
           type="text"
           name="Discord"
           label="Discord"
-          :value="result?.user?.socials?.discord ?? ''"
+          :value="user?.socials?.discord ?? ''"
         />
         <FormKit
           type="text"
           name="Facebook"
           label="Facebook"
-          :value="result?.user?.socials?.facebook ?? ''"
+          :value="user?.socials?.facebook ?? ''"
         />
         <FormKit
           type="text"
           name="Instagram"
           label="Instagram"
-          :value="result?.user?.socials?.instagram ?? ''"
+          :value="user?.socials?.instagram ?? ''"
         />
         <FormKit
           type="text"
           name="LinkedIn"
           label="LinkedIn"
-          :value="result?.user?.socials?.linkedIn ?? ''"
+          validation="url"
+          :value="user?.socials?.linkedIn ?? ''"
         />
       </FormKit>
     </div>

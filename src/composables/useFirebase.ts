@@ -15,6 +15,12 @@ import {
   updateProfile,
   User,
 } from 'firebase/auth'
+import {
+  getDownloadURL,
+  getStorage,
+  ref as storageRef,
+  uploadBytes,
+} from 'firebase/storage'
 import { ref } from 'vue'
 
 const microsoftProvider = new OAuthProvider('microsoft.com')
@@ -39,6 +45,7 @@ const app: FirebaseApp = initializeApp({
 })
 console.log({ app })
 const auth: Auth = getAuth(app)
+const storage = getStorage(app)
 
 setPersistence(auth, browserSessionPersistence)
   .then(r => console.log('setPersistence', r))
@@ -123,7 +130,11 @@ export const useFirebase = () => {
       if (!credential) {
         throw { code: 'no credential', message: 'no credential' }
       }
-
+      const microsoftAccessToken = credential.accessToken
+      console.debug({ accessToken: microsoftAccessToken })
+      if (microsoftAccessToken) {
+        localStorage.setItem('accessToken', microsoftAccessToken)
+      }
       return result.user
     } catch (error) {
       const errorCode = error.code
@@ -144,6 +155,11 @@ export const useFirebase = () => {
     return 'Guest'
   }
 
+  /*
+   * Restores the login of the user
+   * Should be called on app startup
+   * @returns the user if the user is logged in, null if the user is not logged in
+   */
   const restoreLogin = async (): Promise<User | null> => {
     console.log('restoreLogin')
     return new Promise((resolve, reject) => {
@@ -153,6 +169,87 @@ export const useFirebase = () => {
         resolve(user)
       })
     })
+  }
+
+  const getProfilePictureUrl = async (): Promise<string | null> => {
+    const user = firebaseUser.value
+    if (!user) {
+      console.log('no user')
+      return null
+    }
+    return user.photoURL
+  }
+
+  /*
+   * Gets the profile picture of the user, use Microsoft access token from local storage if available
+   * Stores the profile picture in firebase storage
+   * @returns the download url of the uploaded file or undefined if no file was found
+   */
+  const DownloadProfilePicture = async () => {
+    const accessToken = localStorage.getItem('accessToken')
+    if (!accessToken) {
+      console.log('no access token')
+      return
+    }
+    return await lookupMsAzureProfilePhoto(accessToken)
+  }
+
+  /*
+   * Looks up the profile picture of the user in Microsoft Azure
+   * If the profile picture is found, it will be uploaded to firebase storage
+   * @param MICROSOFT accessToken the access token to use for the request
+   * @returns the download url of the uploaded file or undefined if no file was found
+   */
+  const lookupMsAzureProfilePhoto = async (accessToken: string) => {
+    const response = await fetch(
+      'https://graph.microsoft.com/v1.0/me/photo/$value',
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+          'Content-Type': 'image/jpg',
+        },
+      },
+    )
+    if (response.status === 401) {
+      console.log('no access')
+      // invalid access token
+      localStorage.removeItem('accessToken')
+      return
+    }
+    if (response.ok) {
+      const data = await response.blob()
+      return await uploadProfilePicture(data)
+    } else {
+      console.log('no profile picture found')
+      return
+    }
+  }
+
+  /*
+   * Uploads a profile picture to firebase storage
+   * @param blob the blob to upload
+   * @returns the download url of the uploaded file
+   */
+  const uploadProfilePicture = async (blob: Blob): Promise<string> => {
+    const storageReference = storageRef(
+      storage,
+      'profilePictures/' + firebaseUser.value?.uid,
+    )
+
+    const snapshot = await uploadBytes(storageReference, blob)
+    console.log('Uploaded a blob or file!', snapshot)
+    // get download url
+    const downloadUrl = await getDownloadURL(storageReference)
+
+    // update profile picture
+    // todo: decide if i should do this here or in backend
+    if (firebaseUser.value) {
+      await updateProfile(firebaseUser.value, {
+        photoURL: downloadUrl,
+      })
+    }
+
+    return downloadUrl
   }
 
   return {
@@ -167,5 +264,7 @@ export const useFirebase = () => {
     passwordReset,
     register,
     restoreLogin,
+    DownloadProfilePicture,
+    getProfilePictureUrl,
   }
 }

@@ -9,26 +9,23 @@ import { defaultConfig, plugin } from '@formkit/vue'
 import config from '../formkit.config.ts'
 import '@formkit/themes/genesis'
 
-
 import './assets/style.css'
 import App from '@/App.vue'
 
 import { useFirebase } from '@/composables/useFirebase.ts'
 import { router } from '@/bootstrap/router.ts'
 import { useFirstLogin } from '@/composables/useFirstLogin'
+import { useApolloClient } from '@/composables/useApolloClient.ts'
 
-const { restoreLogin } = useFirebase()
+// load apollo client
+const {} = useApolloClient()
+const { restoreLogin, DownloadProfilePicture, MicrosoftLoginResult } =
+  useFirebase()
 const { postFirstLogin } = useFirstLogin()
 
 const create = () => {
   postFirstLogin()
-  // MicrosoftLoginResult()
-  //   .then(user => {
-  //     console.log('MicrosoftLoginResult', user)
-  //   })
-  //   .catch(error => {
-  //     console.debug('MicrosoftLoginResult error', error)
-  //   })
+  MicrosoftLoginResult()
 
   createApp(App)
     .use(router)
@@ -37,6 +34,9 @@ const create = () => {
     // }))
     .use(plugin, defaultConfig(config))
     .mount('#app')
+
+  /// playground
+  const pfpUrl = DownloadProfilePicture()
 }
 
 restoreLogin().then(create)

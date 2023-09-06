@@ -2023,6 +2023,39 @@
             "deprecationReason": null
           },
           {
+            "name": "updateProfilePictureUri",
+            "description": null,
+            "args": [
+              {
+                "name": "uri",
+                "description": null,
+                "type": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": {
+                    "kind": "SCALAR",
+                    "name": "String",
+                    "ofType": null
+                  }
+                },
+                "defaultValue": null,
+                "isDeprecated": false,
+                "deprecationReason": null
+              }
+            ],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "Boolean",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "updateSocials",
             "description": null,
             "args": [
@@ -3244,13 +3277,9 @@
             "description": null,
             "args": [],
             "type": {
-              "kind": "NON_NULL",
-              "name": null,
-              "ofType": {
-                "kind": "SCALAR",
-                "name": "String",
-                "ofType": null
-              }
+              "kind": "SCALAR",
+              "name": "String",
+              "ofType": null
             },
             "isDeprecated": false,
             "deprecationReason": null
@@ -3260,13 +3289,9 @@
             "description": null,
             "args": [],
             "type": {
-              "kind": "NON_NULL",
-              "name": null,
-              "ofType": {
-                "kind": "SCALAR",
-                "name": "URL",
-                "ofType": null
-              }
+              "kind": "SCALAR",
+              "name": "String",
+              "ofType": null
             },
             "isDeprecated": false,
             "deprecationReason": null
@@ -3276,13 +3301,9 @@
             "description": null,
             "args": [],
             "type": {
-              "kind": "NON_NULL",
-              "name": null,
-              "ofType": {
-                "kind": "SCALAR",
-                "name": "URL",
-                "ofType": null
-              }
+              "kind": "SCALAR",
+              "name": "String",
+              "ofType": null
             },
             "isDeprecated": false,
             "deprecationReason": null
@@ -3292,13 +3313,9 @@
             "description": null,
             "args": [],
             "type": {
-              "kind": "NON_NULL",
-              "name": null,
-              "ofType": {
-                "kind": "SCALAR",
-                "name": "URL",
-                "ofType": null
-              }
+              "kind": "SCALAR",
+              "name": "String",
+              "ofType": null
             },
             "isDeprecated": false,
             "deprecationReason": null
@@ -3352,7 +3369,7 @@
             "description": null,
             "type": {
               "kind": "INPUT_OBJECT",
-              "name": "UrlOperationFilterInput",
+              "name": "StringOperationFilterInput",
               "ofType": null
             },
             "defaultValue": null,
@@ -3364,7 +3381,7 @@
             "description": null,
             "type": {
               "kind": "INPUT_OBJECT",
-              "name": "UrlOperationFilterInput",
+              "name": "StringOperationFilterInput",
               "ofType": null
             },
             "defaultValue": null,
@@ -3376,7 +3393,7 @@
             "description": null,
             "type": {
               "kind": "INPUT_OBJECT",
-              "name": "UrlOperationFilterInput",
+              "name": "StringOperationFilterInput",
               "ofType": null
             },
             "defaultValue": null,
@@ -3418,13 +3435,9 @@
             "name": "discord",
             "description": null,
             "type": {
-              "kind": "NON_NULL",
-              "name": null,
-              "ofType": {
-                "kind": "SCALAR",
-                "name": "String",
-                "ofType": null
-              }
+              "kind": "SCALAR",
+              "name": "String",
+              "ofType": null
             },
             "defaultValue": null,
             "isDeprecated": false,
@@ -3434,13 +3447,9 @@
             "name": "facebook",
             "description": null,
             "type": {
-              "kind": "NON_NULL",
-              "name": null,
-              "ofType": {
-                "kind": "SCALAR",
-                "name": "URL",
-                "ofType": null
-              }
+              "kind": "SCALAR",
+              "name": "String",
+              "ofType": null
             },
             "defaultValue": null,
             "isDeprecated": false,
@@ -3450,13 +3459,9 @@
             "name": "instagram",
             "description": null,
             "type": {
-              "kind": "NON_NULL",
-              "name": null,
-              "ofType": {
-                "kind": "SCALAR",
-                "name": "URL",
-                "ofType": null
-              }
+              "kind": "SCALAR",
+              "name": "String",
+              "ofType": null
             },
             "defaultValue": null,
             "isDeprecated": false,
@@ -3466,13 +3471,9 @@
             "name": "linkedIn",
             "description": null,
             "type": {
-              "kind": "NON_NULL",
-              "name": null,
-              "ofType": {
-                "kind": "SCALAR",
-                "name": "URL",
-                "ofType": null
-              }
+              "kind": "SCALAR",
+              "name": "String",
+              "ofType": null
             },
             "defaultValue": null,
             "isDeprecated": false,
@@ -3505,8 +3506,8 @@
             "name": "facebook",
             "description": null,
             "type": {
-              "kind": "INPUT_OBJECT",
-              "name": "UriSortInput",
+              "kind": "ENUM",
+              "name": "SortEnumType",
               "ofType": null
             },
             "defaultValue": null,
@@ -3517,8 +3518,8 @@
             "name": "instagram",
             "description": null,
             "type": {
-              "kind": "INPUT_OBJECT",
-              "name": "UriSortInput",
+              "kind": "ENUM",
+              "name": "SortEnumType",
               "ofType": null
             },
             "defaultValue": null,
@@ -3529,8 +3530,8 @@
             "name": "linkedIn",
             "description": null,
             "type": {
-              "kind": "INPUT_OBJECT",
-              "name": "UriSortInput",
+              "kind": "ENUM",
+              "name": "SortEnumType",
               "ofType": null
             },
             "defaultValue": null,
@@ -3782,16 +3783,6 @@
         "possibleTypes": null
       },
       {
-        "kind": "SCALAR",
-        "name": "URL",
-        "description": null,
-        "fields": null,
-        "inputFields": null,
-        "interfaces": null,
-        "enumValues": null,
-        "possibleTypes": null
-      },
-      {
         "kind": "ENUM",
         "name": "UpdateAudience",
         "description": null,
@@ -3824,432 +3815,6 @@
             "deprecationReason": null
           }
         ],
-        "possibleTypes": null
-      },
-      {
-        "kind": "INPUT_OBJECT",
-        "name": "UriSortInput",
-        "description": null,
-        "fields": null,
-        "inputFields": [
-          {
-            "name": "absolutePath",
-            "description": null,
-            "type": {
-              "kind": "ENUM",
-              "name": "SortEnumType",
-              "ofType": null
-            },
-            "defaultValue": null,
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "absoluteUri",
-            "description": null,
-            "type": {
-              "kind": "ENUM",
-              "name": "SortEnumType",
-              "ofType": null
-            },
-            "defaultValue": null,
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "authority",
-            "description": null,
-            "type": {
-              "kind": "ENUM",
-              "name": "SortEnumType",
-              "ofType": null
-            },
-            "defaultValue": null,
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "dnsSafeHost",
-            "description": null,
-            "type": {
-              "kind": "ENUM",
-              "name": "SortEnumType",
-              "ofType": null
-            },
-            "defaultValue": null,
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "fragment",
-            "description": null,
-            "type": {
-              "kind": "ENUM",
-              "name": "SortEnumType",
-              "ofType": null
-            },
-            "defaultValue": null,
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "host",
-            "description": null,
-            "type": {
-              "kind": "ENUM",
-              "name": "SortEnumType",
-              "ofType": null
-            },
-            "defaultValue": null,
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "hostNameType",
-            "description": null,
-            "type": {
-              "kind": "ENUM",
-              "name": "SortEnumType",
-              "ofType": null
-            },
-            "defaultValue": null,
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "idnHost",
-            "description": null,
-            "type": {
-              "kind": "ENUM",
-              "name": "SortEnumType",
-              "ofType": null
-            },
-            "defaultValue": null,
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "isAbsoluteUri",
-            "description": null,
-            "type": {
-              "kind": "ENUM",
-              "name": "SortEnumType",
-              "ofType": null
-            },
-            "defaultValue": null,
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "isDefaultPort",
-            "description": null,
-            "type": {
-              "kind": "ENUM",
-              "name": "SortEnumType",
-              "ofType": null
-            },
-            "defaultValue": null,
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "isFile",
-            "description": null,
-            "type": {
-              "kind": "ENUM",
-              "name": "SortEnumType",
-              "ofType": null
-            },
-            "defaultValue": null,
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "isLoopback",
-            "description": null,
-            "type": {
-              "kind": "ENUM",
-              "name": "SortEnumType",
-              "ofType": null
-            },
-            "defaultValue": null,
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "isUnc",
-            "description": null,
-            "type": {
-              "kind": "ENUM",
-              "name": "SortEnumType",
-              "ofType": null
-            },
-            "defaultValue": null,
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "localPath",
-            "description": null,
-            "type": {
-              "kind": "ENUM",
-              "name": "SortEnumType",
-              "ofType": null
-            },
-            "defaultValue": null,
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "originalString",
-            "description": null,
-            "type": {
-              "kind": "ENUM",
-              "name": "SortEnumType",
-              "ofType": null
-            },
-            "defaultValue": null,
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "pathAndQuery",
-            "description": null,
-            "type": {
-              "kind": "ENUM",
-              "name": "SortEnumType",
-              "ofType": null
-            },
-            "defaultValue": null,
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "port",
-            "description": null,
-            "type": {
-              "kind": "ENUM",
-              "name": "SortEnumType",
-              "ofType": null
-            },
-            "defaultValue": null,
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "query",
-            "description": null,
-            "type": {
-              "kind": "ENUM",
-              "name": "SortEnumType",
-              "ofType": null
-            },
-            "defaultValue": null,
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "scheme",
-            "description": null,
-            "type": {
-              "kind": "ENUM",
-              "name": "SortEnumType",
-              "ofType": null
-            },
-            "defaultValue": null,
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "userEscaped",
-            "description": null,
-            "type": {
-              "kind": "ENUM",
-              "name": "SortEnumType",
-              "ofType": null
-            },
-            "defaultValue": null,
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "userInfo",
-            "description": null,
-            "type": {
-              "kind": "ENUM",
-              "name": "SortEnumType",
-              "ofType": null
-            },
-            "defaultValue": null,
-            "isDeprecated": false,
-            "deprecationReason": null
-          }
-        ],
-        "interfaces": null,
-        "enumValues": null,
-        "possibleTypes": null
-      },
-      {
-        "kind": "INPUT_OBJECT",
-        "name": "UrlOperationFilterInput",
-        "description": null,
-        "fields": null,
-        "inputFields": [
-          {
-            "name": "eq",
-            "description": null,
-            "type": {
-              "kind": "SCALAR",
-              "name": "URL",
-              "ofType": null
-            },
-            "defaultValue": null,
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "gt",
-            "description": null,
-            "type": {
-              "kind": "SCALAR",
-              "name": "URL",
-              "ofType": null
-            },
-            "defaultValue": null,
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "gte",
-            "description": null,
-            "type": {
-              "kind": "SCALAR",
-              "name": "URL",
-              "ofType": null
-            },
-            "defaultValue": null,
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "in",
-            "description": null,
-            "type": {
-              "kind": "LIST",
-              "name": null,
-              "ofType": {
-                "kind": "SCALAR",
-                "name": "URL",
-                "ofType": null
-              }
-            },
-            "defaultValue": null,
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "lt",
-            "description": null,
-            "type": {
-              "kind": "SCALAR",
-              "name": "URL",
-              "ofType": null
-            },
-            "defaultValue": null,
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "lte",
-            "description": null,
-            "type": {
-              "kind": "SCALAR",
-              "name": "URL",
-              "ofType": null
-            },
-            "defaultValue": null,
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "neq",
-            "description": null,
-            "type": {
-              "kind": "SCALAR",
-              "name": "URL",
-              "ofType": null
-            },
-            "defaultValue": null,
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "ngt",
-            "description": null,
-            "type": {
-              "kind": "SCALAR",
-              "name": "URL",
-              "ofType": null
-            },
-            "defaultValue": null,
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "ngte",
-            "description": null,
-            "type": {
-              "kind": "SCALAR",
-              "name": "URL",
-              "ofType": null
-            },
-            "defaultValue": null,
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "nin",
-            "description": null,
-            "type": {
-              "kind": "LIST",
-              "name": null,
-              "ofType": {
-                "kind": "SCALAR",
-                "name": "URL",
-                "ofType": null
-              }
-            },
-            "defaultValue": null,
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "nlt",
-            "description": null,
-            "type": {
-              "kind": "SCALAR",
-              "name": "URL",
-              "ofType": null
-            },
-            "defaultValue": null,
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "nlte",
-            "description": null,
-            "type": {
-              "kind": "SCALAR",
-              "name": "URL",
-              "ofType": null
-            },
-            "defaultValue": null,
-            "isDeprecated": false,
-            "deprecationReason": null
-          }
-        ],
-        "interfaces": null,
-        "enumValues": null,
         "possibleTypes": null
       },
       {
