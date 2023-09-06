@@ -16,6 +16,7 @@ export default defineConfig({
       },
       secondary: {
         500: '#00ffff',
+        700: '#44C8F5',
       },
       tertiary: {
         500: '#ffff00',

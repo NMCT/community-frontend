@@ -55,7 +55,7 @@ watch(firebaseUser, () => {
 </script>
 
 <template>
-  <div>
+  <div class="font-sans">
     <header
       class="font-title font-400 mx8 mt-4 flex items-center justify-between text-neutral-700"
     >

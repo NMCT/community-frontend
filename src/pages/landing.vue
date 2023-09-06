@@ -1,13 +1,13 @@
 <script setup>
 import WrapBalancer from 'vue-wrap-balancer'
-import CallToAction from '@/components/elements/CallToAction.vue'
+import CallToAction from '@/components/elements/CtaBold.vue'
 </script>
 
 <template>
-  <div class="mb-52 mt-48 flex flex-col items-center justify-center">
+  <section class="mb-52 mt-48 flex flex-col items-center justify-center">
     <h2 class="font-title text-8xl text-neutral-700">Get sh*t done!</h2>
-    <div class="mt-6 max-w-md text-center text-lg">
-      <wrap-balancer>
+    <div class="mt-6 max-w-md text-center font-sans text-lg">
+      <wrap-balancer :ratio="0.7">
         With some help from fellow students, you will find extra motivation,
         learn more and get to meet new people!
       </wrap-balancer>
@@ -50,9 +50,26 @@ import CallToAction from '@/components/elements/CallToAction.vue'
         />
       </svg>
 
-      <span>See coming events</span>
+      <span class="font-sans">See coming events</span>
     </call-to-action>
-  </div>
+  </section>
+  <section class="mb-70 flex flex-col items-center justify-center">
+    <h3 class="font-title text-6xl text-neutral-700">How it works.</h3>
+    <div class="mt-6 max-w-md text-center font-sans text-lg">
+      <wrap-balancer :ratio="0.7">
+        You are stronger with some help... Work with other students and get more
+        done.
+      </wrap-balancer>
+
+      <!--      TODO: Illustration here-->
+    </div>
+  </section>
+  <section class="mb-70 flex flex-col items-center justify-center">
+    <h3 class="font-title text-6xl text-neutral-700">Coming up</h3>
+    <div class="mt-8 text-center text-lg">
+      Events to help you to become a better version of you.
+    </div>
+  </section>
 </template>
 
 <style scoped></style>
