@@ -43,15 +43,20 @@ const navigation = ref<INavigation>({
   },
 })
 
-watch(firebaseUser, () => {
-  if (firebaseUser.value) {
-    navigation.value.account.name = 'Account'
-    navigation.value.account.path = '/account'
-  } else {
-    navigation.value.account.name = 'Login'
-    navigation.value.account.path = '/login'
-  }
-})
+watch(
+  firebaseUser,
+  () => {
+    if (firebaseUser.value) {
+      navigation.value.account.name =
+        firebaseUser.value.displayName ?? 'Account'
+      navigation.value.account.path = '/account'
+    } else {
+      navigation.value.account.name = 'Login'
+      navigation.value.account.path = '/login'
+    }
+  },
+  { deep: true, immediate: true },
+)
 </script>
 
 <template>

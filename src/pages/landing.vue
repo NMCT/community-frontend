@@ -4,16 +4,44 @@ import CallToAction from '@/components/elements/CtaBold.vue'
 import CtaSubtile from '@/components/elements/CtaSubtile.vue'
 import Event from '@/components/cards/Event.vue'
 import { Event as IEvent } from '@/gql/graphql'
+import { useRouter } from 'vue-router'
+const router = useRouter()
 
 const mockupEvent: IEvent = {
   id: '1',
-  title: 'Event title',
+  title: 'Prototyping consult',
   description: 'Event description',
-  location: 'Event location',
-  audience: 'Event audience',
-  startDate: 'Event start date',
+  location: 'A.2.301',
+  audience: '2MCT',
+  startDate: '12/09/2023',
   endDate: 'Event end date',
-  attendees: [],
+  attendees: [
+    {
+      uid: 'Attendee uid',
+      profilePicture:
+        'https://firebasestorage.googleapis.com/v0/b/community-mct.appspot.com/o/profilePictures%2FgmZ7L1T1LzPnYErPKuZcLrnksKB3?alt=media&token=795a6879-e83b-4364-9723-b2572a2435c7',
+    },
+    {
+      uid: 'Attendee uid 2',
+      profilePicture:
+        'https://firebasestorage.googleapis.com/v0/b/community-mct.appspot.com/o/profilePictures%2FgmZ7L1T1LzPnYErPKuZcLrnksKB3?alt=media&token=795a6879-e83b-4364-9723-b2572a2435c7',
+    },
+    {
+      uid: 'Attendee uid 3',
+      profilePicture:
+        'https://firebasestorage.googleapis.com/v0/b/community-mct.appspot.com/o/profilePictures%2FgmZ7L1T1LzPnYErPKuZcLrnksKB3?alt=media&token=795a6879-e83b-4364-9723-b2572a2435c7',
+    },
+    {
+      uid: 'Attendee uid4 ',
+      profilePicture:
+        'https://firebasestorage.googleapis.com/v0/b/community-mct.appspot.com/o/profilePictures%2FgmZ7L1T1LzPnYErPKuZcLrnksKB3?alt=media&token=795a6879-e83b-4364-9723-b2572a2435c7',
+    },
+    {
+      uid: 'Attendee uid5 ',
+      profilePicture:
+        'https://firebasestorage.googleapis.com/v0/b/community-mct.appspot.com/o/profilePictures%2FgmZ7L1T1LzPnYErPKuZcLrnksKB3?alt=media&token=795a6879-e83b-4364-9723-b2572a2435c7',
+    },
+  ],
   organizer: {
     uid: 'Organizer uid',
     name: 'Organizer name',
@@ -32,7 +60,7 @@ const mockupEvent: IEvent = {
         learn more and get to meet new people!
       </wrap-balancer>
     </div>
-    <call-to-action class="mt-6">
+    <call-to-action class="mt-6" @click="router.push('/events')">
       <svg
         width="20"
         height="22"
@@ -89,10 +117,14 @@ const mockupEvent: IEvent = {
     <div class="mt-8 text-center text-lg">
       Events to help you to become a better version of you.
     </div>
-    <Event :event="mockupEvent"></Event>
     <CtaSubtile>
       <span>Check out all events</span>
     </CtaSubtile>
+    <div class="mt-13 flex flex-row gap-8">
+      <Event :event="mockupEvent"></Event>
+      <Event :event="mockupEvent"></Event>
+      <Event :event="mockupEvent"></Event>
+    </div>
   </section>
 </template>
 

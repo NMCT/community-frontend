@@ -1,3 +1,4 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@font-face {
+    font-family: "Menlo";
+    src: url("src/assets/fonts/Menlo-Regular.woff") format("woff");
+}

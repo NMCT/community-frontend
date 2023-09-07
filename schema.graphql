@@ -92,10 +92,10 @@ type ShortUser {
 }
 
 type Socials {
-    discord: String!
-    facebook: URL!
-    instagram: URL!
-    linkedIn: URL!
+    discord: String
+    facebook: String
+    instagram: String
+    linkedIn: String
 }
 
 type Subscription {
@@ -147,8 +147,6 @@ scalar DateTime
 
 "The ObjectId scalar type represents a 12 byte ObjectId, represented as UTF-8 character sequences."
 scalar ObjectId
-
-scalar URL
 
 input BooleanOperationFilterInput {
     eq: Boolean
@@ -336,24 +334,24 @@ input ShortUserSortInput {
 input SocialsFilterInput {
     and: [SocialsFilterInput!]
     discord: StringOperationFilterInput
-    facebook: UrlOperationFilterInput
-    instagram: UrlOperationFilterInput
-    linkedIn: UrlOperationFilterInput
+    facebook: StringOperationFilterInput
+    instagram: StringOperationFilterInput
+    linkedIn: StringOperationFilterInput
     or: [SocialsFilterInput!]
 }
 
 input SocialsInput {
-    discord: String!
-    facebook: URL!
-    instagram: URL!
-    linkedIn: URL!
+    discord: String
+    facebook: String
+    instagram: String
+    linkedIn: String
 }
 
 input SocialsSortInput {
     discord: SortEnumType
-    facebook: UriSortInput
-    instagram: UriSortInput
-    linkedIn: UriSortInput
+    facebook: SortEnumType
+    instagram: SortEnumType
+    linkedIn: SortEnumType
 }
 
 input StringOperationFilterInput {
@@ -369,45 +367,6 @@ input StringOperationFilterInput {
     nstartsWith: String
     or: [StringOperationFilterInput!]
     startsWith: String
-}
-
-input UriSortInput {
-    absolutePath: SortEnumType
-    absoluteUri: SortEnumType
-    authority: SortEnumType
-    dnsSafeHost: SortEnumType
-    fragment: SortEnumType
-    host: SortEnumType
-    hostNameType: SortEnumType
-    idnHost: SortEnumType
-    isAbsoluteUri: SortEnumType
-    isDefaultPort: SortEnumType
-    isFile: SortEnumType
-    isLoopback: SortEnumType
-    isUnc: SortEnumType
-    localPath: SortEnumType
-    originalString: SortEnumType
-    pathAndQuery: SortEnumType
-    port: SortEnumType
-    query: SortEnumType
-    scheme: SortEnumType
-    userEscaped: SortEnumType
-    userInfo: SortEnumType
-}
-
-input UrlOperationFilterInput {
-    eq: URL
-    gt: URL
-    gte: URL
-    in: [URL]
-    lt: URL
-    lte: URL
-    neq: URL
-    ngt: URL
-    ngte: URL
-    nin: [URL]
-    nlt: URL
-    nlte: URL
 }
 
 input UserFilterInput {
