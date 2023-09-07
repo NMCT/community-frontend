@@ -2,6 +2,11 @@ import { defineConfig } from 'unocss'
 
 export default defineConfig({
   theme: {
+    extends: {
+      textColor: {
+        default: '#1F2937',
+      },
+    },
     fontFamily: {
       sans: ['Inter', 'sans-serif'],
       title: ['Paytone One', 'sans-serif'],

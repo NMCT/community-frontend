@@ -1,8 +1,8 @@
 import { createApp } from 'vue'
 
 // Uno css framework
-import 'virtual:uno.css'
 import '@unocss/reset/tailwind.css'
+import 'virtual:uno.css'
 
 // formkit
 import { defaultConfig, plugin } from '@formkit/vue'

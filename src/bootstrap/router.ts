@@ -1,5 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import Home from '@/pages/index.vue'
+import Home from '@/pages/events/index.vue'
 import Login from '@/pages/auth/login.vue'
 import { useFirebase } from '@/composables/useFirebase.ts'
 
@@ -30,11 +30,21 @@ export const router = createRouter({
     },
     {
       path: '/events',
-      name: routes.events,
-      component: Home,
       meta: {
         requiresAuth: true,
       },
+      children: [
+        {
+          path: '',
+          name: routes.events,
+          component: Home,
+        },
+        {
+          path: ':id',
+          name: 'eventById',
+          component: () => import('@/pages/events/Details.vue'),
+        },
+      ],
     },
     {
       path: '/login',

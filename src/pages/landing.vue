@@ -5,6 +5,7 @@ import CtaSubtile from '@/components/elements/CtaSubtile.vue'
 import Event from '@/components/cards/Event.vue'
 import { Event as IEvent } from '@/gql/graphql'
 import { useRouter } from 'vue-router'
+import CalendarSvg from '@/components/CalendarSvg.vue'
 const router = useRouter()
 
 const mockupEvent: IEvent = {
@@ -61,42 +62,7 @@ const mockupEvent: IEvent = {
       </wrap-balancer>
     </div>
     <call-to-action class="mt-6" @click="router.push('/events')">
-      <svg
-        width="20"
-        height="22"
-        viewBox="0 0 20 22"
-        fill="none"
-        xmlns="http://www.w3.org/2000/svg"
-      >
-        <path
-          d="M17 3H3C1.89543 3 1 3.89543 1 5V19C1 20.1046 1.89543 21 3 21H17C18.1046 21 19 20.1046 19 19V5C19 3.89543 18.1046 3 17 3Z"
-          stroke="white"
-          stroke-width="2"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-        />
-        <path
-          d="M14 1V5"
-          stroke="white"
-          stroke-width="2"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-        />
-        <path
-          d="M6 1V5"
-          stroke="white"
-          stroke-width="2"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-        />
-        <path
-          d="M1 9H19"
-          stroke="white"
-          stroke-width="2"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-        />
-      </svg>
+      <CalendarSvg />
 
       <span class="font-sans">See coming events</span>
     </call-to-action>

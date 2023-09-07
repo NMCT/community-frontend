@@ -3,6 +3,7 @@ import type { PropType } from 'vue'
 import { computed } from 'vue'
 import { Event } from '@/gql/graphql'
 import CtaSubtile from '@/components/elements/CtaSubtile.vue'
+import { RouterLink } from 'vue-router'
 
 const props = defineProps({
   event: {
@@ -12,16 +13,28 @@ const props = defineProps({
 })
 
 const attendeeCount = computed(() => {
-  return props.event.attendees.length
+  // check if props.event.attendees is not undefined
+  return props.event.attendees?.length
 })
 const amountOfDisplayAttendees = computed(() => {
+  if (attendeeCount.value == undefined) return 0
   if (attendeeCount.value == 4) return 4
   return Math.min(3, attendeeCount.value)
+})
+
+const startDate = computed(() => {
+  const date = new Date(props.event.startDate)
+  // format DD/MM/YYYY with leading zero
+  const day = date.getDate().toString().padStart(2, '0')
+  const month = (date.getMonth() + 1).toString().padStart(2, '0')
+  const year = date.getFullYear()
+  return `${day}/${month}/${year}`
 })
 </script>
 
 <template>
-  <div
+  <router-link
+    :to="`/events/${props.event.id}`"
     class="rounded-2 p4 w-md flex flex-col gap-6 border-4 border-neutral-300"
   >
     <div class="flex flex-row justify-between">
@@ -34,7 +47,7 @@ const amountOfDisplayAttendees = computed(() => {
         </div>
       </div>
       <div class="font-menlo leading-10 text-neutral-500">
-        {{ event.startDate }}
+        {{ startDate }}
       </div>
     </div>
 
@@ -68,7 +81,7 @@ const amountOfDisplayAttendees = computed(() => {
       </div>
       <CtaSubtile> ook gaan?</CtaSubtile>
     </div>
-  </div>
+  </router-link>
 </template>
 
 <style scoped></style>

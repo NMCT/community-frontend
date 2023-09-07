@@ -11,10 +11,39 @@ const updateProfilePictureGql = graphql(`
     updateProfilePictureUri(uri: $input)
   }
 `)
-const { mutate: UpdateProfilePicture } = useMutation(updateProfilePictureGql)
+const { mutate: updateProfilePicture } = useMutation(updateProfilePictureGql)
+
+const attendEventGql = graphql(`
+  mutation attendEvent($eventId: String!) {
+    attendEvent(eventId: $eventId) {
+      id
+      attendees {
+        uid
+        name
+      }
+    }
+  }
+`)
+
+const { mutate: attendEvent } = useMutation(attendEventGql)
+
+const unattendEventGql = graphql(`
+  mutation unattendEvent($eventId: String!) {
+    unattendEvent(eventId: $eventId) {
+      id
+      attendees {
+        uid
+      }
+    }
+  }
+`)
+
+const { mutate: unattendEvent } = useMutation(unattendEventGql)
 
 export const useMutations = () => {
   return {
-    UpdateProfilePicture,
+    updateProfilePicture,
+    attendEvent,
+    unattendEvent,
   }
 }
