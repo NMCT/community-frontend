@@ -15,6 +15,7 @@ const { firebaseUser } = useFirebase()
 
 const audience = ref<string>('')
 const order = ref<SortEnumType>(SortEnumType.Desc)
+const searchQuery = ref<string>('')
 
 interface IEvents {
   events: {
@@ -28,9 +29,11 @@ const { result, loading, error, refetch } = useQuery<IEvents>(
       $afterDate: DateTime
       $audience: String
       $order: SortEnumType
+      $query: String
     ) {
       events(
         where: {
+          title: { contains: $query }
           startDate: { gt: $afterDate }
           audience: { contains: $audience }
         }
@@ -59,6 +62,7 @@ const { result, loading, error, refetch } = useQuery<IEvents>(
     afterDate: new Date(Date.now() - 1000 * 60 * 60 * 24),
     audience: audience.value,
     order: order.value,
+    query: searchQuery.value,
   }),
 )
 console.log(result)
@@ -84,9 +88,16 @@ const updateAudience = (e: any) => {
   if (e.target) {
     return
   }
-  console.log(e)
   refetch({
     audience: e,
+  })
+}
+
+const search = (e: any) => {
+  console.log(e)
+  searchQuery.value = e.target.value
+  refetch({
+    searchQuery: searchQuery.value,
   })
 }
 </script>
@@ -112,6 +123,8 @@ const updateAudience = (e: any) => {
         </CtaBold>
       </RouterLink>
       <div class="flex flex-row self-end justify-self-end">
+        <label for="search">Search</label>
+        <input type="text" @change="search" name="search" />
         <AudienceSelector
           class="p2 b-3 rounded-2 w-min"
           @change="updateAudience"
@@ -120,7 +133,7 @@ const updateAudience = (e: any) => {
       </div>
     </div>
     <Loader v-if="loading"></Loader>
-    <div v-else-if="result" class="werk mt-16">
+    <div v-else-if="result" class="layout mt-16 grid gap-8">
       <Event
         class="min-h-full"
         v-for="event of result.events.items"
@@ -131,9 +144,7 @@ const updateAudience = (e: any) => {
   </section>
 </template>
 <style scoped>
-.werk {
-  display: grid;
-  gap: 2rem;
+.layout {
   grid-template-columns: repeat(auto-fill, minmax(28rem, 1fr));
   grid-template-rows: max-content;
 }
