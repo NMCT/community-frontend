@@ -42,7 +42,7 @@ const output = computed(() =>
 )
 watch(output, () => {
   emits('update', output.value)
-  emits('updateInput', ouput.value)
+  emits('updateInput', output.value)
 })
 </script>
 
