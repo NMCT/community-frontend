@@ -255,6 +255,7 @@ export const useFirebase = () => {
   return {
     auth,
     firebaseUser,
+    currentUser: auth.currentUser,
 
     MicrosoftLogin,
     MicrosoftLoginResult,

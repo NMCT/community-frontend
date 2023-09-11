@@ -37,4 +37,3 @@ export default {
 </template>
 
 <style scoped></style>
-@/composables/useFirebase

@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { marked } from 'marked'
-import { computed, defineProps, ref, watch } from 'vue'
+import { computed, ref, watch } from 'vue'
 import { debounce } from 'lodash'
 
 const update = debounce(e => {
@@ -11,7 +11,6 @@ const props = defineProps({
   input: {
     type: String,
     required: false,
-    default: '# Hello World',
   },
   view: {
     type: String,

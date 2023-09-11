@@ -83,7 +83,13 @@ watch(
     <button @click="clickLogout" v-if="false">Log out</button>
 
     <slot></slot>
-    <footer>Footer Here</footer>
+    <footer class="fixed inset-x-0 bottom-0">
+      <div class="flex flex-row">
+        <div class="bg-tertiary-500 h-2 w-full"></div>
+        <div class="bg-primary-500 h2 w-full"></div>
+        <div class="bg-secondary-500 h2 w-full"></div>
+      </div>
+    </footer>
   </div>
 </template>
 

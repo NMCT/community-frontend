@@ -9,7 +9,18 @@ import { setContext } from '@apollo/client/link/context'
 
 const { firebaseUser } = useFirebase()
 
-const cache = new InMemoryCache()
+// set possible id fields to _id, id, or uid
+const cache = new InMemoryCache({
+  typePolicies: {
+    Query: {
+      fields: {
+        user: {
+          keyArgs: ['_id', 'id', 'uid'],
+        },
+      },
+    },
+  },
+})
 
 const baseUrl = import.meta.env.VITE_BASE_URL
 const httpLink = createHttpLink({

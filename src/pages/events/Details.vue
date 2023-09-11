@@ -5,8 +5,9 @@ import { useQuery } from '@vue/apollo-composable'
 import { Event } from '@/gql/graphql.ts'
 import { computed, ref, watch } from 'vue'
 import { marked } from 'marked'
-import { useMutations } from '@/composables/useMutations.ts'
 import { useFirebase } from '@/composables/useFirebase.ts'
+import Attending from '@/components/elements/Attending.vue'
+import Interested from '@/components/elements/Interested.vue'
 
 const { currentRoute } = useRouter()
 const { id } = currentRoute.value.params as { id: string }
@@ -14,11 +15,6 @@ const { firebaseUser } = useFirebase()
 interface IEvent {
   event: Event
 }
-
-const {
-  attendEvent: attendEventMutation,
-  unattendEvent: UnattendEventMutation,
-} = useMutations()
 
 const { result, loading, error } = useQuery<IEvent>(
   graphql(`
@@ -39,6 +35,10 @@ const { result, loading, error } = useQuery<IEvent>(
           profilePicture
           uid
         }
+        interested {
+          profilePicture
+          uid
+        }
         description
         audience
         title
@@ -52,14 +52,20 @@ const { result, loading, error } = useQuery<IEvent>(
 )
 
 const isAttending = ref<boolean>(false)
-
+const isInterested = ref<boolean>(false)
 watch(
   result,
   () => {
-    if (!result.value || !result.value.event.attendees) return
-    isAttending.value = result.value.event.attendees.some(
-      attendee => attendee.uid === firebaseUser.value?.uid,
-    )
+    if (result.value && result.value.event.attendees) {
+      isAttending.value = result.value.event.attendees.some(
+        attendee => attendee.uid === firebaseUser.value?.uid,
+      )
+    }
+    if (result.value && result.value.event.interested) {
+      isInterested.value = result.value.event.interested.some(
+        attendee => attendee.uid === firebaseUser.value?.uid,
+      )
+    }
   },
   { immediate: true, deep: true },
 )
@@ -74,38 +80,6 @@ const description = computed(() => {
     mangle: false,
   })
 })
-
-const attendEvent = async () => {
-  if (!firebaseUser.value) return
-  const res = await attendEventMutation({
-    eventId: id,
-  })
-
-  const attending = res?.data?.attendEvent?.attendees?.some(
-    attendee => attendee.uid === firebaseUser.value?.uid,
-  )
-  if (attending === undefined) {
-    console.warn('Error attending event')
-    return
-  }
-  isAttending.value = attending
-}
-
-const unattendEvent = async () => {
-  if (!firebaseUser.value) return
-  const res = await UnattendEventMutation({
-    eventId: id,
-  })
-
-  const attending = res?.data?.unattendEvent?.attendees?.some(
-    attendee => attendee.uid === firebaseUser.value?.uid,
-  )
-  if (attending === undefined) {
-    console.warn('Error unattending event')
-    return
-  }
-  isAttending.value = attending
-}
 </script>
 
 <template>
@@ -121,12 +95,9 @@ const unattendEvent = async () => {
     <div>
       {{ result.event.location }}
     </div>
-    <div class="text-pink">Isattending: {{ isAttending }}</div>
-    <button @click="() => (isAttending ? unattendEvent() : attendEvent())">
-      {{ !isAttending ? 'Attend Event' : 'Attending' }}
-    </button>
 
-    <button>Interested</button>
+    <attending :id="id" :isAttending="isAttending" />
+    <Interested :id="id" :is-interested="isInterested" />
 
     <div v-html="description"></div>
   </div>

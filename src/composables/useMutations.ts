@@ -1,6 +1,5 @@
-import { provideApolloClient } from '@vue/apollo-composable'
+import { provideApolloClient, useMutation } from '@vue/apollo-composable'
 import { useApolloClient } from '@/composables/useApolloClient.ts'
-import { useMutation } from '@vue/apollo-composable'
 import { graphql } from '@/gql'
 
 const { apolloClient } = useApolloClient()
@@ -19,7 +18,6 @@ const attendEventGql = graphql(`
       id
       attendees {
         uid
-        name
       }
     }
   }
@@ -40,10 +38,38 @@ const unattendEventGql = graphql(`
 
 const { mutate: unattendEvent } = useMutation(unattendEventGql)
 
+const interestEventGql = graphql(`
+  mutation interestEvent($eventId: String!) {
+    interestedEvent(eventId: $eventId) {
+      id
+      interested {
+        uid
+      }
+    }
+  }
+`)
+
+const { mutate: interestEvent } = useMutation(interestEventGql)
+
+const uninterestEventGql = graphql(`
+  mutation uninterestEvent($eventId: String!) {
+    uninterestedEvent(eventId: $eventId) {
+      id
+      interested {
+        uid
+      }
+    }
+  }
+`)
+
+const { mutate: uninterestEvent } = useMutation(uninterestEventGql)
+
 export const useMutations = () => {
   return {
     updateProfilePicture,
     attendEvent,
     unattendEvent,
+    interestEvent,
+    uninterestEvent,
   }
 }
