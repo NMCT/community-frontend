@@ -62,7 +62,7 @@ watch(
 <template>
   <div class="font-sans">
     <header
-      class="font-title font-400 mx8 mt-4 flex items-center justify-between text-neutral-700"
+      class="font-title font-400 mx8 my-4 flex items-center justify-between text-neutral-700"
     >
       <!--      Title -->
       <div>MCT Community</div>

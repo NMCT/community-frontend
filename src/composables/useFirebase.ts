@@ -73,11 +73,7 @@ export const useFirebase = () => {
       },
     )
   }
-  const login = async (
-    email: string,
-    password: string,
-    remember: boolean,
-  ): Promise<User> => {
+  const login = async (email: string, password: string): Promise<User> => {
     return new Promise((resolve, reject) => {
       signInWithEmailAndPassword(auth, email, password)
         .then(userCredential => {

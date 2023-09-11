@@ -5,7 +5,7 @@ import CtaSubtile from '@/components/elements/CtaSubtile.vue'
 import Event from '@/components/cards/Event.vue'
 import { Event as IEvent } from '@/gql/graphql'
 import { useRouter } from 'vue-router'
-import CalendarSvg from '@/components/CalendarSvg.vue'
+import CalendarSvg from '@/components/svg/CalendarSvg.vue'
 import { useQuery } from '@vue/apollo-composable'
 import { graphql } from '@/gql'
 
