@@ -2,7 +2,7 @@
 import { useFirebase } from '@/composables/useFirebase.ts'
 import LoginWithMicrosoftSvg from '@/components/svg/LoginWithMicrosoftSvg.vue'
 
-const { MicrosoftLogin } = useFirebase()
+const { microsoftLogin } = useFirebase()
 export default {
   name: 'MicrosoftLogin',
   components: { LoginWithMicrosoftSvg },
@@ -12,7 +12,7 @@ export default {
   methods: {
     login() {
       console.log('login')
-      MicrosoftLogin()
+      microsoftLogin()
     },
   },
 }
@@ -20,7 +20,11 @@ export default {
 
 <template>
   <div>
-    <p class="py-2 text-center">of</p>
+    <div class="pb-6 pt-4">
+      <p class="b-b-1 w-full border-neutral-700 text-center leading-[0.1em]">
+        <span class="bg-white px-3">of</span>
+      </p>
+    </div>
     <button
       @click="login"
       class="border-3 rounded-2 b-neutral-300 w-full py-2 text-center"
@@ -31,4 +35,8 @@ export default {
   </div>
 </template>
 
-<style scoped></style>
+<style scoped>
+h2 {
+  margin: 10px 0 20px;
+}
+</style>

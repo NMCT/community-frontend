@@ -28,7 +28,7 @@ const props = defineProps({
     default: '',
   },
 })
-const emits = defineEmits(['update'])
+const emits = defineEmits(['update', 'updateInput'])
 
 const input = ref(props.input ?? '# Hello World')
 const output = computed(() =>
@@ -42,6 +42,7 @@ const output = computed(() =>
 )
 watch(output, () => {
   emits('update', output.value)
+  emits('updateInput', ouput.value)
 })
 </script>
 
@@ -51,6 +52,7 @@ watch(output, () => {
   </div>
   <div class="editor" v-if="view === 'editor'">
     <textarea
+      class="w-full"
       name="input"
       :value="input"
       @input="update"

@@ -1,9 +1,10 @@
 <script setup lang="ts">
 import { graphql } from '@/gql'
 import { useMutation, useQuery } from '@vue/apollo-composable'
-import { computed, ref, watch } from 'vue'
+import { computed, ref } from 'vue'
 import { useFirebase } from '@/composables/useFirebase.ts'
 import { Socials, User } from '@/gql/graphql.ts'
+import CtaSubtile from '@/components/elements/CtaSubtile.vue'
 
 const { firebaseUser } = useFirebase()
 
@@ -173,6 +174,9 @@ console.log(user, loading)
         />
       </FormKit>
     </div>
+    <RouterLink to="/logout">
+      <CtaSubtile> Log uit </CtaSubtile>
+    </RouterLink>
   </div>
 </template>
 

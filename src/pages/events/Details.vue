@@ -8,7 +8,6 @@ import { marked } from 'marked'
 import { useFirebase } from '@/composables/useFirebase.ts'
 import Attending from '@/components/elements/Attending.vue'
 import Interested from '@/components/elements/Interested.vue'
-
 const { currentRoute } = useRouter()
 const { id } = currentRoute.value.params as { id: string }
 const { firebaseUser } = useFirebase()

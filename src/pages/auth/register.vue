@@ -35,49 +35,39 @@ export default {
 </script>
 
 <template>
-  <Error title="Login failed" :msg="msg" v-if="msg !== ''"></Error>
-  <FormKit type="form" submit-label="Registreer" @submit="submitSignup">
-    <FormKit
-      type="email"
-      name="email"
-      id="email"
-      label="Email"
-      validation="required|email"
-    />
-    <FormKit
-      type="text"
-      name="username"
-      id="username"
-      label="Gebruikersnaam"
-      validation="required|length:3"
-    ></FormKit>
-    <FormKit
-      type="password"
-      name="password"
-      label="Wachtwoord"
-      validation="required|length:8"
-      suffix-icon="eyeClosed"
-      @suffix-icon-click="handleIconClick"
-    ></FormKit>
-    <FormKit
-      type="password"
-      name="password_confirm"
-      label="Wachtwoord bevestigen"
-      validation="required|confirm"
-      validation-visibility="live"
-      suffix-icon="eyeClosed"
-      @suffix-icon-click="handleIconClick"
-    />
-    <FormKit
-      type="checkbox"
-      name="remember"
-      id="remember"
-      label="Remember me"
-    />
-  </FormKit>
-  <router-link to="/login"
-    >Al een account? <span class="underline">Meld aan</span></router-link
-  >
+  <div class="grid min-h-full place-items-center">
+    <div class="b-3 b-neutral-300 rounded-2 min-w-md form p-6">
+      <h2 class="font-title mb-4 text-lg">Registreer als gast</h2>
+      <Error title="Login failed" :msg="msg" v-if="msg !== ''"></Error>
+      <FormKit type="form" submit-label="Registreer" @submit="submitSignup">
+        <FormKit
+          type="email"
+          name="email"
+          id="email"
+          label="Email"
+          validation="required|email"
+        />
+        <FormKit
+          type="text"
+          name="username"
+          id="username"
+          label="Gebruikersnaam"
+          validation="required|length:3"
+        ></FormKit>
+        <FormKit
+          type="password"
+          name="password"
+          label="Wachtwoord"
+          validation="required|length:8"
+          suffix-icon="eyeClosed"
+          @suffix-icon-click="handleIconClick"
+        ></FormKit>
+      </FormKit>
+      <router-link to="/login"
+        >Al een account? <span class="underline">Meld aan</span>
+      </router-link>
+    </div>
+  </div>
 </template>
 
-<style scoped></style>
+<style></style>

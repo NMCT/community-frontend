@@ -16,7 +16,8 @@ interface INavigation {
     name: string
     path: string
     meta?: {
-      highLight: boolean
+      highLight?: boolean
+      isHidden?: boolean
     }
   }
 }
@@ -29,6 +30,9 @@ const navigation = ref<INavigation>({
   events: {
     name: 'Events',
     path: '/events',
+    meta: {
+      isHidden: true,
+    },
   },
   about: {
     name: 'About',
@@ -50,7 +54,13 @@ watch(
       navigation.value.account.name =
         firebaseUser.value.displayName ?? 'Account'
       navigation.value.account.path = '/account'
+      if (navigation.value.events.meta) {
+        navigation.value.events.meta.isHidden = false
+      }
     } else {
+      if (navigation.value.events.meta) {
+        navigation.value.events.meta.isHidden = true
+      }
       navigation.value.account.name = 'Login'
       navigation.value.account.path = '/login'
     }
@@ -73,7 +83,10 @@ watch(
         <li
           v-for="nav in navigation"
           :key="nav.name"
-          :class="nav.meta?.highLight ? 'text-primary-500' : ''"
+          :class="{
+            'text-primary-500': nav.meta?.highLight,
+            hidden: nav.meta?.isHidden,
+          }"
         >
           <router-link :to="nav.path">{{ nav.name }}</router-link>
         </li>
