@@ -19,17 +19,19 @@ const isMicrosoftUser =
 </script>
 
 <template>
-  <div>security</div>
-  <div>
+  <div class="my-4">
+    <div class="font-title text-lg">security</div>
     <div>
-      <h3>email address</h3>
-      <p>the email address associated with your account</p>
-      <p>{{ email }}</p>
-    </div>
-    <div v-if="!isMicrosoftUser">
-      <h3>Password</h3>
-      <p>Set a unique password to secure your account</p>
-      <button @click="">Change Password</button>
+      <div>
+        <h3>email address</h3>
+        <p>the email address associated with your account</p>
+        <p>{{ email }}</p>
+      </div>
+      <div v-if="!isMicrosoftUser">
+        <h3>Password</h3>
+        <p>Set a unique password to secure your account</p>
+        <button @click="">Change Password</button>
+      </div>
     </div>
   </div>
 </template>

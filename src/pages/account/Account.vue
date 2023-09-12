@@ -1,8 +1,9 @@
 <script setup lang="ts">
 import { useRoute } from 'vue-router'
+import { computed } from 'vue'
 
 const route = useRoute()
-const section = route.path.split('/')[2]
+const section = computed(() => route.path.split('/')[2])
 </script>
 
 <template>
@@ -20,7 +21,7 @@ const section = route.path.split('/')[2]
             'text-primary-500': section === 'security',
           }"
         >
-          <RouterLink to="/account/security"> Security </RouterLink>
+          <RouterLink to="/account/security"> Security</RouterLink>
         </div>
         <div
           class="font-title text-lg leading-7"

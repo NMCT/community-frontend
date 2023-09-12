@@ -86,7 +86,7 @@ watch(md, () => {
 </script>
 <template>
   <div class="grid min-h-full place-items-center">
-    <div class="b-3 b-neutral-300 rounded-2 p-6">
+    <div class="b-3 b-neutral-300 rounded-2 min-w-md p-6">
       <h2 class="font-title mb-4 text-lg">Create new event</h2>
       <FormKit
         type="form"
@@ -138,20 +138,18 @@ watch(md, () => {
             max="1000"
           />
         </div>
-        <div class="flex max-w-md flex-row gap-4">
-          <FormKit
-            type="datetime-local"
-            name="startDate"
-            label="Start date"
-            validation="required|date_after"
-          />
-          <FormKit
-            type="datetime-local"
-            name="endDate"
-            label="End date"
-            validation="required|date_after"
-          />
-        </div>
+        <FormKit
+          type="datetime-local"
+          name="startDate"
+          label="Start date"
+          validation="required|date_after"
+        />
+        <FormKit
+          type="datetime-local"
+          name="endDate"
+          label="End date"
+          validation="required|date_after"
+        />
 
         <div class="mb-3 mt-2 flex justify-between">
           <span class="font-bold">Preview</span>
