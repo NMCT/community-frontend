@@ -11,56 +11,10 @@ import { graphql } from '@/gql'
 
 const router = useRouter()
 
-const mockupEvent: IEvent = {
-  maxAttendees: 0,
-  openToGuests: false,
-  type: EventType.Community,
-  id: '1',
-  title: 'Prototyping consult',
-  description: 'Event description',
-  location: 'A.2.301',
-  audience: '2MCT',
-  startDate: '12/09/2023',
-  endDate: 'Event end date',
-  attendees: [
-    {
-      uid: 'Attendee uid',
-      profilePicture:
-        'https://firebasestorage.googleapis.com/v0/b/community-mct.appspot.com/o/profilePictures%2FgmZ7L1T1LzPnYErPKuZcLrnksKB3?alt=media&token=795a6879-e83b-4364-9723-b2572a2435c7',
-    },
-    {
-      uid: 'Attendee uid 2',
-      profilePicture:
-        'https://firebasestorage.googleapis.com/v0/b/community-mct.appspot.com/o/profilePictures%2FgmZ7L1T1LzPnYErPKuZcLrnksKB3?alt=media&token=795a6879-e83b-4364-9723-b2572a2435c7',
-    },
-    {
-      uid: 'Attendee uid 3',
-      profilePicture:
-        'https://firebasestorage.googleapis.com/v0/b/community-mct.appspot.com/o/profilePictures%2FgmZ7L1T1LzPnYErPKuZcLrnksKB3?alt=media&token=795a6879-e83b-4364-9723-b2572a2435c7',
-    },
-    {
-      uid: 'Attendee uid4 ',
-      profilePicture:
-        'https://firebasestorage.googleapis.com/v0/b/community-mct.appspot.com/o/profilePictures%2FgmZ7L1T1LzPnYErPKuZcLrnksKB3?alt=media&token=795a6879-e83b-4364-9723-b2572a2435c7',
-    },
-    {
-      uid: 'Attendee uid5 ',
-      profilePicture:
-        'https://firebasestorage.googleapis.com/v0/b/community-mct.appspot.com/o/profilePictures%2FgmZ7L1T1LzPnYErPKuZcLrnksKB3?alt=media&token=795a6879-e83b-4364-9723-b2572a2435c7',
-    },
-  ],
-  organizer: {
-    uid: 'Organizer uid',
-    name: 'Organizer name',
-    email: 'Organizer email',
-    profilePicture: 'Organizer profile picture uri',
-  },
-}
-
 const { result, error, loading } = useQuery(
   graphql(`
     query getUpcomingEvents($afterDate: DateTime) {
-      events(where: { startDate: { gt: $afterDate } }, take: 3) {
+      eventsGuest(where: { startDate: { gt: $afterDate } }, take: 3) {
         items {
           id
           startDate
@@ -121,12 +75,12 @@ const { result, error, loading } = useQuery(
     </CtaSubtile>
     <div
       class="mt-13 flex flex-row flex-wrap justify-center gap-8"
-      v-if="result && result.events"
+      v-if="result && result.eventsGuest"
     >
       <Event
         class="w-md"
         :event="event as IEvent"
-        v-for="event of result.events.items"
+        v-for="event of result.eventsGuest.items"
         :key="event.id"
       />
     </div>

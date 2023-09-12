@@ -53,7 +53,7 @@ watch(
     if (firebaseUser.value) {
       navigation.value.account.name =
         firebaseUser.value.displayName ?? 'Account'
-      navigation.value.account.path = '/account'
+      navigation.value.account.path = '/account/security'
       if (navigation.value.events.meta) {
         navigation.value.events.meta.isHidden = false
       }
@@ -85,7 +85,6 @@ watch(
           :key="nav.name"
           :class="{
             'text-primary-500': nav.meta?.highLight,
-            hidden: nav.meta?.isHidden,
           }"
         >
           <router-link :to="nav.path">{{ nav.name }}</router-link>

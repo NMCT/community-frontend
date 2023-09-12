@@ -79,8 +79,11 @@ const submitForm = async (e: any) => {
     errors.value = [e.message]
   }
 }
+
+watch(md, () => {
+  console.info(md.value)
+})
 </script>
-<!--todo: submit-->
 <template>
   <div class="grid min-h-full place-items-center">
     <div class="b-3 b-neutral-300 rounded-2 p-6">
@@ -96,6 +99,16 @@ const submitForm = async (e: any) => {
           type="text"
           name="title"
           label="Title"
+          validation="required|length:3"
+          :classes="{
+            outer: 'w-full',
+            wrapper: ' $reset w-full',
+          }"
+        />
+        <FormKit
+          type="text"
+          name="location"
+          label="Location"
           validation="required|length:3"
           :classes="{
             outer: 'w-full',

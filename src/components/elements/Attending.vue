@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { useFirebase } from '@/composables/useFirebase.ts'
 import { useMutations } from '@/composables/useMutations.ts'
+import CtaBold from '@/components/elements/CtaBold.vue'
 
 const props = defineProps({
   id: {
@@ -36,10 +37,9 @@ const unattendEvent = async () => {
 </script>
 
 <template>
-  <div class="text-pink">Isattending: {{ isAttending }}</div>
-  <button @click="() => (isAttending ? unattendEvent() : attendEvent())">
+  <cta-bold @click="() => (isAttending ? unattendEvent() : attendEvent())">
     {{ !isAttending ? 'Attend Event' : 'Attending' }}
-  </button>
+  </cta-bold>
 </template>
 
 <style scoped></style>
