@@ -3,7 +3,7 @@ import WrapBalancer from 'vue-wrap-balancer'
 import CallToAction from '@/components/elements/CtaBold.vue'
 import CtaSubtile from '@/components/elements/CtaSubtile.vue'
 import Event from '@/components/cards/Event.vue'
-import { Event as IEvent } from '@/gql/graphql'
+import { Event as IEvent, EventType } from '@/gql/graphql'
 import { useRouter } from 'vue-router'
 import CalendarSvg from '@/components/svg/CalendarSvg.vue'
 import { useQuery } from '@vue/apollo-composable'
@@ -12,6 +12,9 @@ import { graphql } from '@/gql'
 const router = useRouter()
 
 const mockupEvent: IEvent = {
+  maxAttendees: 0,
+  openToGuests: false,
+  type: EventType.Community,
   id: '1',
   title: 'Prototyping consult',
   description: 'Event description',

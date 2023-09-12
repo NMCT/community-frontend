@@ -10,6 +10,7 @@ import CalendarSvg from '@/components/svg/CalendarSvg.vue'
 import WrapBalancer from 'vue-wrap-balancer'
 import Loader from '@/components/elements/Loader.vue'
 import AudienceSelector from '@/components/elements/AudienceSelector.vue'
+import { LucideArrowDown, LucideArrowUp, LucideSearch } from 'lucide-vue-next'
 
 const { firebaseUser } = useFirebase()
 
@@ -122,14 +123,27 @@ const search = (e: any) => {
           Create an event
         </CtaBold>
       </RouterLink>
-      <div class="flex flex-row self-end justify-self-end">
-        <label for="search">Search</label>
-        <input type="text" @change="search" name="search" />
+      <div class="flex flex-row gap-4 self-end justify-self-end">
+        <div class="grid">
+          <input
+            type="text"
+            @change="search"
+            placeholder="Search.."
+            name="search"
+            class="rounded-2 b-3 b-neutral-300 col-start-1 row-start-1 p-1 px-2"
+          />
+          <LucideSearch
+            class="col-start-1 row-start-1 mr-2 h-6 w-6 self-center justify-self-end"
+          />
+        </div>
         <AudienceSelector
           class="p2 b-3 rounded-2 w-min"
           @change="updateAudience"
         />
-        <button @click="toggleOrder">{{ order }}</button>
+        <button class="b-3 b-neutral-300 rounded-2 px-2" @click="toggleOrder">
+          <LucideArrowDown v-if="order === SortEnumType.Desc" />
+          <LucideArrowUp v-else />
+        </button>
       </div>
     </div>
     <Loader v-if="loading"></Loader>

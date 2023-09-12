@@ -7,10 +7,11 @@ import Switch from '@/components/headlessui/switch.vue'
 import { useFirebase } from '@/composables/useFirebase.ts'
 import { EventType } from '@/gql/graphql.ts'
 import { useRouter } from 'vue-router'
+import useAudiences from '@/composables/useAudiences.ts'
 
 const { push } = useRouter()
-
-const errors = ref<string[]>([])
+const { audiences } = useAudiences()
+const errors = ref<any[] | undefined>([])
 const gql = graphql(`
   mutation createNewEvent($input: EventInput!) {
     createEvent(eventInput: $input) {
@@ -74,9 +75,7 @@ const submitForm = async (e: any) => {
     if (result?.data) {
       await push(`/events/${result?.data.createEvent.id}`)
     }
-  } catch (e) {
-    console.log('catch')
-    console.log(e)
+  } catch (e: any) {
     errors.value = [e.message]
   }
 }
@@ -84,7 +83,7 @@ const submitForm = async (e: any) => {
 <!--todo: submit-->
 <template>
   <div class="grid min-h-full place-items-center">
-    <div class="b-3 b-neutral-300 rounded-2 min-w-2xl p-6">
+    <div class="b-3 b-neutral-300 rounded-2 p-6">
       <h2 class="font-title mb-4 text-lg">Create new event</h2>
       <FormKit
         type="form"
@@ -96,25 +95,62 @@ const submitForm = async (e: any) => {
         <FormKit
           type="text"
           name="title"
-          label="Titel"
+          label="Title"
           validation="required|length:3"
+          :classes="{
+            outer: 'w-full',
+            wrapper: ' $reset w-full',
+          }"
         />
-        <FormKit
-          type="text"
-          name="location"
-          label="Locatie"
-          validation="required|length:3"
-        />
-        <div>
-          Preview
+        <div class="flex max-w-md flex-row gap-4">
+          <FormKit
+            type="select"
+            name="audience"
+            label="Audience"
+            help="Select the audience for this event"
+            :classes="{
+              outer: 'w-3/5',
+            }"
+            :options="audiences"
+          />
+          <FormKit
+            type="number"
+            name="maxAttendees"
+            label=" max attendee count"
+            validation="required|number"
+            :classes="{
+              outer: 'w-2/5',
+            }"
+            min="1"
+            max="1000"
+          />
+        </div>
+        <div class="flex max-w-md flex-row gap-4">
+          <FormKit
+            type="datetime-local"
+            name="startDate"
+            label="Start date"
+            validation="required|date_after"
+          />
+          <FormKit
+            type="datetime-local"
+            name="endDate"
+            label="End date"
+            validation="required|date_after"
+          />
+        </div>
+
+        <div class="mb-3 mt-2 flex justify-between">
+          <span class="font-bold">Preview</span>
           <Switch v-model="editorViewMode" screenReader="Toggle editor mode" />
         </div>
         <editor
-          label="Beschrijving"
+          label="Description"
           :view="editorViewMode ? 'viewer' : 'editor'"
           @update="body = $event"
           @updateInput="md = $event"
-          placeholder="Beschrijving"
+          placeholder="Description"
+          class="mb-4"
         />
         <div v-if="userType === 'Admin'">
           <FormKit
@@ -125,42 +161,16 @@ const submitForm = async (e: any) => {
             help="Officieel: Evenementen georganiseerd door de school. Community: Evenementen georganiseerd door de community."
           />
         </div>
-        <FormKit
-          type="text"
-          name="audience"
-          label="Doelpubliek"
-          help="Voor wie is dit evenement bedoeld?"
-        />
 
-        <FormKit
-          type="datetime-local"
-          name="startDate"
-          label="Start datum"
-          validation="required|date_after"
-        />
-        <FormKit
-          type="datetime-local"
-          name="endDate"
-          label="Eind datum"
-          validation="required|date_after"
-        />
-        <FormKit
-          type="number"
-          name="maxAttendees"
-          label="Maximale aantal deelnemers"
-          validation="required|number"
-          min="1"
-          max="1000"
-        />
         <FormKit
           type="checkbox"
           name="openToGuests"
-          label="Open voor gasten"
-          help="Sta toe om niet-Howest-studenten toe te laten tot het evenement"
+          label="Open to guests"
+          help="Allow Non-Howest students to attend this event"
         />
       </FormKit>
       <div v-else>
-        <p>Je hebt geen rechten om een evenement aan te maken</p>
+        <p>403: Not authorized</p>
       </div>
     </div>
   </div>

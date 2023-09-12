@@ -11,6 +11,7 @@ console.log(firebaseUser.value)
 
 const { getUserQuery } = useUser()
 console.log(uid)
+if (!uid) throw new Error('no uid')
 const { result } = useQuery(getUserQuery, { id: uid })
 
 const isMicrosoftUser =

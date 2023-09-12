@@ -128,14 +128,6 @@ console.log(user, loading)
         alt="Your profile picture"
         class="h24 w-24 rounded-full"
       />
-      <div v-for="socialKey in user.socials" :key="user.socials[socialKey]">
-        <div>
-          {{ socialKey }}
-        </div>
-        <div>
-          {{ user.socials[socialKey] }}
-        </div>
-      </div>
     </div>
     <div v-if="edit">
       <div>Editing...</div>

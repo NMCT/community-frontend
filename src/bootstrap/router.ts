@@ -8,6 +8,7 @@ const { logout, firebaseUser } = useFirebase()
 export enum routes {
   landing = 'Landing',
   events = 'Home',
+  about = 'About',
   login = 'Login',
   register = 'Register',
   passwordReset = 'PasswordReset',
@@ -26,6 +27,14 @@ export const router = createRouter({
       path: '/',
       name: routes.landing,
       component: () => import('@/pages/landing.vue'),
+      meta: {
+        requiresAuth: false,
+      },
+    },
+    {
+      path: '/about',
+      name: routes.about,
+      component: () => import('@/pages/About.vue'),
       meta: {
         requiresAuth: false,
       },

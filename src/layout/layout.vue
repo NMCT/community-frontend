@@ -95,7 +95,9 @@ watch(
 
     <button @click="clickLogout" v-if="false">Log out</button>
 
-    <slot></slot>
+    <div class="pb-4">
+      <slot></slot>
+    </div>
     <footer class="fixed inset-x-0 bottom-0">
       <div class="flex flex-row">
         <div class="bg-tertiary-500 h-2 w-full"></div>

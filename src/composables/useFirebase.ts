@@ -185,9 +185,9 @@ const microsoftLoginResult = async (): Promise<User> => {
       localStorage.setItem('accessToken', microsoftAccessToken)
     }
     return result.user
-  } catch (error) {
-    const errorCode = error.code
-    const errorMessage = error.message
+  } catch (error: any) {
+    const errorCode = error.code ?? 'unknown'
+    const errorMessage = error.message ?? 'unknown'
     throw { code: errorCode, message: errorMessage }
   }
 }
