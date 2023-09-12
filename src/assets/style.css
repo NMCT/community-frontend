@@ -6,3 +6,26 @@
 body{
     color: #1F2937
 }
+
+
+.form [data-type='submit'] .formkit-input {
+    background-color: #ff00ff;
+    width: 100%;
+    font-size: 1.125rem;
+    padding: 0.5rem 0;
+    border: solid 3px #f3f4f6;
+    border-radius: 0.5rem;
+}
+
+.form [data-type='submit'] .formkit-input:is(:focus-within, :focus) {
+    border-color: #44c8f5;
+    outline: none;
+}
+
+.form [data-type='submit'] .formkit-input:hover {
+    background-color: #ff4dff;
+}
+
+.form .formkit-actions {
+    margin-top: 0;
+}

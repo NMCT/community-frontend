@@ -4,7 +4,7 @@ import { genesisIcons } from '@formkit/icons'
 
 const config: DefaultConfigOptions = {
   locales: { nl },
-  locale: 'nl-BE',
+  locale: 'en',
   icons: {
     ...genesisIcons,
   },

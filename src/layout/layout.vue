@@ -16,7 +16,8 @@ interface INavigation {
     name: string
     path: string
     meta?: {
-      highLight: boolean
+      highLight?: boolean
+      isHidden?: boolean
     }
   }
 }
@@ -29,6 +30,9 @@ const navigation = ref<INavigation>({
   events: {
     name: 'Events',
     path: '/events',
+    meta: {
+      isHidden: true,
+    },
   },
   about: {
     name: 'About',
@@ -50,7 +54,13 @@ watch(
       navigation.value.account.name =
         firebaseUser.value.displayName ?? 'Account'
       navigation.value.account.path = '/account'
+      if (navigation.value.events.meta) {
+        navigation.value.events.meta.isHidden = false
+      }
     } else {
+      if (navigation.value.events.meta) {
+        navigation.value.events.meta.isHidden = true
+      }
       navigation.value.account.name = 'Login'
       navigation.value.account.path = '/login'
     }
@@ -62,7 +72,7 @@ watch(
 <template>
   <div class="font-sans">
     <header
-      class="font-title font-400 mx8 mt-4 flex items-center justify-between text-neutral-700"
+      class="font-title font-400 mx8 my-4 flex items-center justify-between text-neutral-700"
     >
       <!--      Title -->
       <div>MCT Community</div>
@@ -73,7 +83,10 @@ watch(
         <li
           v-for="nav in navigation"
           :key="nav.name"
-          :class="nav.meta?.highLight ? 'text-primary-500' : ''"
+          :class="{
+            'text-primary-500': nav.meta?.highLight,
+            hidden: nav.meta?.isHidden,
+          }"
         >
           <router-link :to="nav.path">{{ nav.name }}</router-link>
         </li>
@@ -82,8 +95,16 @@ watch(
 
     <button @click="clickLogout" v-if="false">Log out</button>
 
-    <slot></slot>
-    <footer>Footer Here</footer>
+    <div class="pb-4">
+      <slot></slot>
+    </div>
+    <footer class="fixed inset-x-0 bottom-0">
+      <div class="flex flex-row">
+        <div class="bg-tertiary-500 h-2 w-full"></div>
+        <div class="bg-primary-500 h2 w-full"></div>
+        <div class="bg-secondary-500 h2 w-full"></div>
+      </div>
+    </footer>
   </div>
 </template>
 

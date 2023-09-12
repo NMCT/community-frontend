@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { marked } from 'marked'
-import { computed, defineProps, ref, watch } from 'vue'
+import { computed, ref, watch } from 'vue'
 import { debounce } from 'lodash'
 
 const update = debounce(e => {
@@ -11,7 +11,6 @@ const props = defineProps({
   input: {
     type: String,
     required: false,
-    default: '# Hello World',
   },
   view: {
     type: String,
@@ -29,9 +28,9 @@ const props = defineProps({
     default: '',
   },
 })
-const emits = defineEmits(['update'])
+const emits = defineEmits(['update', 'updateInput'])
 
-const input = ref(props.input ?? '# Hello World')
+const input = ref(props.input ?? '')
 const output = computed(() =>
   marked(input.value, {
     gfm: true,
@@ -43,22 +42,30 @@ const output = computed(() =>
 )
 watch(output, () => {
   emits('update', output.value)
+  emits('updateInput', output.value)
 })
 </script>
 
 <template>
-  <div class="label" v-if="label">
-    <strong>{{ label }}</strong>
+  <div>
+    <div class="label" v-if="label">
+      <strong>{{ label }}</strong>
+    </div>
+    <div class="editor" v-if="view === 'editor'">
+      <textarea
+        class="w-full"
+        name="input"
+        :value="input"
+        @input="update"
+        :placeholder="placeholder"
+      ></textarea>
+    </div>
+    <div
+      class="output border-3 rounded-2 b-neutral-300 px-6 py-4"
+      v-html="output"
+      v-else-if="view === 'viewer'"
+    ></div>
   </div>
-  <div class="editor" v-if="view === 'editor'">
-    <textarea
-      name="input"
-      :value="input"
-      @input="update"
-      :placeholder="placeholder"
-    ></textarea>
-  </div>
-  <div class="output" v-html="output" v-else-if="view === 'viewer'"></div>
 </template>
 
 <style scoped></style>

@@ -8,11 +8,14 @@ const { logout, firebaseUser } = useFirebase()
 export enum routes {
   landing = 'Landing',
   events = 'Home',
+  about = 'About',
   login = 'Login',
   register = 'Register',
   passwordReset = 'PasswordReset',
   account = 'Account',
   accountHome = 'AccountHome',
+  accountSecurity = 'AccountSecurity',
+  accountSocial = 'AccountSocial',
   new = 'New',
   notFound = '404',
 }
@@ -24,6 +27,14 @@ export const router = createRouter({
       path: '/',
       name: routes.landing,
       component: () => import('@/pages/landing.vue'),
+      meta: {
+        requiresAuth: false,
+      },
+    },
+    {
+      path: '/about',
+      name: routes.about,
+      component: () => import('@/pages/About.vue'),
       meta: {
         requiresAuth: false,
       },
@@ -75,12 +86,18 @@ export const router = createRouter({
     },
     {
       path: '/account',
-      name: routes.account,
+      name: routes.accountHome,
+      component: () => import('@/pages/account/Account.vue'),
       children: [
         {
-          path: '',
-          name: routes.accountHome,
-          component: () => import('@/pages/account/index.vue'),
+          path: 'security',
+          name: routes.accountSecurity,
+          component: () => import('@/pages/account/Security.vue'),
+        },
+        {
+          path: 'social',
+          name: routes.accountSocial,
+          component: () => import('@/pages/account/Social.vue'),
         },
       ],
       meta: {

@@ -3,12 +3,18 @@ import WrapBalancer from 'vue-wrap-balancer'
 import CallToAction from '@/components/elements/CtaBold.vue'
 import CtaSubtile from '@/components/elements/CtaSubtile.vue'
 import Event from '@/components/cards/Event.vue'
-import { Event as IEvent } from '@/gql/graphql'
+import { Event as IEvent, EventType } from '@/gql/graphql'
 import { useRouter } from 'vue-router'
-import CalendarSvg from '@/components/CalendarSvg.vue'
+import CalendarSvg from '@/components/svg/CalendarSvg.vue'
+import { useQuery } from '@vue/apollo-composable'
+import { graphql } from '@/gql'
+
 const router = useRouter()
 
 const mockupEvent: IEvent = {
+  maxAttendees: 0,
+  openToGuests: false,
+  type: EventType.Community,
   id: '1',
   title: 'Prototyping consult',
   description: 'Event description',
@@ -50,6 +56,33 @@ const mockupEvent: IEvent = {
     profilePicture: 'Organizer profile picture uri',
   },
 }
+
+const { result, error, loading } = useQuery(
+  graphql(`
+    query getUpcomingEvents($afterDate: DateTime) {
+      events(where: { startDate: { gt: $afterDate } }, take: 3) {
+        items {
+          id
+          startDate
+          attendees {
+            profilePicture
+            uid
+          }
+          interested {
+            profilePicture
+            uid
+          }
+          audience
+          title
+          location
+        }
+      }
+    }
+  `),
+  {
+    afterDate: new Date(Date.now() - 1000 * 60 * 60 * 24),
+  },
+)
 </script>
 
 <template>
@@ -86,10 +119,16 @@ const mockupEvent: IEvent = {
     <CtaSubtile>
       <span>Check out all events</span>
     </CtaSubtile>
-    <div class="mt-13 flex flex-row gap-8">
-      <Event :event="mockupEvent"></Event>
-      <Event :event="mockupEvent"></Event>
-      <Event :event="mockupEvent"></Event>
+    <div
+      class="mt-13 flex flex-row flex-wrap justify-center gap-8"
+      v-if="result && result.events"
+    >
+      <Event
+        class="w-md"
+        :event="event as IEvent"
+        v-for="event of result.events.items"
+        :key="event.id"
+      />
     </div>
   </section>
 </template>

@@ -43,7 +43,7 @@ type EventsCollectionSegment {
 type Mutation {
     attendEvent(eventId: String!): Event!
     changeDisplayName(displayName: String!): User!
-    createEvent(input: EventInput!): Event!
+    createEvent(eventInput: EventInput!): Event!
     deleteUser: Boolean!
     firstLogin(idToken: String!): User!
     interestedEvent(eventId: String!): Event!
@@ -189,21 +189,15 @@ input EventFilterInput {
 }
 
 input EventInput {
-    attendees: [ShortUserInput!]
     audience: String
-    createdOn: DateTime
-    description: String!
+    description: String
     endDate: DateTime!
-    id: ObjectId
-    interested: [ShortUserInput!]
-    location: String!
+    location: String
     maxAttendees: Int!
     openToGuests: Boolean!
-    organizer: ShortUserInput!
     startDate: DateTime!
-    title: String!
+    title: String
     type: EventType!
-    updatedOn: DateTime
 }
 
 input EventSortInput {
@@ -315,13 +309,6 @@ input ShortUserFilterInput {
     or: [ShortUserFilterInput!]
     profilePicture: StringOperationFilterInput
     uid: StringOperationFilterInput
-}
-
-input ShortUserInput {
-    email: String
-    name: String
-    profilePicture: String
-    uid: String!
 }
 
 input ShortUserSortInput {

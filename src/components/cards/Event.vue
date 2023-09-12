@@ -4,6 +4,9 @@ import { computed } from 'vue'
 import { Event } from '@/gql/graphql'
 import CtaSubtile from '@/components/elements/CtaSubtile.vue'
 import { RouterLink } from 'vue-router'
+import { useFirebase } from '@/composables/useFirebase.ts'
+
+const { currentUser } = useFirebase()
 
 const props = defineProps({
   event: {
@@ -13,7 +16,6 @@ const props = defineProps({
 })
 
 const attendeeCount = computed(() => {
-  // check if props.event.attendees is not undefined
   return props.event.attendees?.length
 })
 const amountOfDisplayAttendees = computed(() => {
@@ -30,12 +32,33 @@ const startDate = computed(() => {
   const year = date.getFullYear()
   return `${day}/${month}/${year}`
 })
+
+const isAttending = computed(() => {
+  return props.event.attendees?.some(
+    attendee => attendee.uid === currentUser?.uid,
+  )
+})
+const isInterested = computed(() => {
+  return props.event.interested?.some(
+    attendee => attendee.uid === currentUser?.uid,
+  )
+})
+
+const manageRSVP = () => {
+  if (isAttending.value) {
+    // unattend
+  } else if (isInterested.value) {
+    // attend
+  } else {
+    // interested
+  }
+}
 </script>
 
 <template>
   <router-link
     :to="`/events/${props.event.id}`"
-    class="rounded-2 p4 w-md flex flex-col gap-6 border-4 border-neutral-300"
+    class="rounded-2 p4 flex flex-col justify-between gap-6 border-4 border-neutral-300"
   >
     <div class="flex flex-row justify-between">
       <div class="max-w-[60%]">
@@ -52,14 +75,18 @@ const startDate = computed(() => {
     </div>
 
     <div class="flex flex-row items-center justify-between">
-      <div v-if="attendeeCount > 0" class="flex flex-row">
+      <div v-if="attendeeCount && attendeeCount > 0" class="flex flex-row">
         <div
           v-for="index of amountOfDisplayAttendees"
           :class="index !== 1 ? '-ml-3' : ''"
         >
           <img
             class="h-10 w-10 rounded-full"
-            :src="event.attendees[index - 1].profilePicture"
+            v-if="event.attendees"
+            :src="
+              event.attendees[index - 1].profilePicture ??
+              'https://st3.depositphotos.com/6672868/13701/v/450/depositphotos_137014128-stock-illustration-user-profile-icon.jpg'
+            "
             alt=""
           />
         </div>
@@ -79,7 +106,12 @@ const startDate = computed(() => {
         <!--       Todo: text update niemand is ingeschreven /-->
         nog niemand ingeschreven
       </div>
-      <CtaSubtile> ook gaan?</CtaSubtile>
+
+      <CtaSubtile @click.prevent="manageRSVP" class="hover:bg-pink p-2">
+        <div v-if="isAttending">Je gaat</div>
+        <div v-else-if="isInterested">Geïnteresseerd</div>
+        <div v-else>Ook gaan?</div>
+      </CtaSubtile>
     </div>
   </router-link>
 </template>

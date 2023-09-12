@@ -19,13 +19,13 @@ import { useApolloClient } from '@/composables/useApolloClient.ts'
 
 // load apollo client
 const {} = useApolloClient()
-const { restoreLogin, DownloadProfilePicture, MicrosoftLoginResult } =
+const { restoreLogin, downloadProfilePicture, microsoftLoginResult } =
   useFirebase()
 const { postFirstLogin } = useFirstLogin()
 
 const create = () => {
   postFirstLogin()
-  MicrosoftLoginResult()
+  microsoftLoginResult()
 
   createApp(App)
     .use(router)
@@ -36,7 +36,7 @@ const create = () => {
     .mount('#app')
 
   /// playground
-  const pfpUrl = DownloadProfilePicture()
+  const pfpUrl = downloadProfilePicture()
 }
 
 restoreLogin().then(create)

@@ -2,10 +2,22 @@ import { defineConfig } from 'unocss'
 
 export default defineConfig({
   theme: {
-    extends: {
+    extend: {
       textColor: {
         default: '#1F2937',
       },
+      gridTemplateColumns: {
+        'event-card': 'repeat(auto-fit, minmax(28rem, 1fr))',
+      },
+      gridTemplateRows: {
+        'max-content': 'max-content',
+      },
+    },
+    gridTemplateColumns: {
+      'event-card': 'repeat(auto-fit, minmax(28rem, 1fr))',
+    },
+    gridTemplateRows: {
+      'max-content': 'max-content',
     },
     fontFamily: {
       sans: ['Inter', 'sans-serif'],
