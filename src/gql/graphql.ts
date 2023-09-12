@@ -159,6 +159,15 @@ export type EventsCollectionSegment = {
   pageInfo: CollectionSegmentInfo;
 };
 
+/** A segment of a collection. */
+export type EventsGuestCollectionSegment = {
+  __typename?: 'EventsGuestCollectionSegment';
+  /** A flattened list of the items. */
+  items?: Maybe<Array<Event>>;
+  /** Information to aid in pagination. */
+  pageInfo: CollectionSegmentInfo;
+};
+
 export type IntOperationFilterInput = {
   eq?: InputMaybe<Scalars['Int']['input']>;
   gt?: InputMaybe<Scalars['Int']['input']>;
@@ -320,6 +329,7 @@ export type Query = {
   __typename?: 'Query';
   event?: Maybe<Event>;
   events?: Maybe<EventsCollectionSegment>;
+  eventsGuest?: Maybe<EventsGuestCollectionSegment>;
   notifications?: Maybe<NotificationsCollectionSegment>;
   user?: Maybe<User>;
   users: Array<User>;
@@ -332,6 +342,14 @@ export type QueryEventArgs = {
 
 
 export type QueryEventsArgs = {
+  order?: InputMaybe<Array<EventSortInput>>;
+  skip?: InputMaybe<Scalars['Int']['input']>;
+  take?: InputMaybe<Scalars['Int']['input']>;
+  where?: InputMaybe<EventFilterInput>;
+};
+
+
+export type QueryEventsGuestArgs = {
   order?: InputMaybe<Array<EventSortInput>>;
   skip?: InputMaybe<Scalars['Int']['input']>;
   take?: InputMaybe<Scalars['Int']['input']>;
