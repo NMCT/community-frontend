@@ -3,10 +3,6 @@ import { marked } from 'marked'
 import { computed, ref, watch } from 'vue'
 import { debounce } from 'lodash'
 
-const update = debounce(e => {
-  input.value = e.target.value
-}, 100)
-
 const props = defineProps({
   input: {
     type: String,
@@ -29,6 +25,10 @@ const props = defineProps({
   },
 })
 const emits = defineEmits(['update', 'updateInput'])
+const update = debounce((e: any) => {
+  input.value = e.target.value
+  emits('updateInput', input.value)
+}, 100)
 
 const input = ref(props.input ?? '')
 const output = computed(() =>
@@ -42,7 +42,6 @@ const output = computed(() =>
 )
 watch(output, () => {
   emits('update', output.value)
-  emits('updateInput', output.value)
 })
 </script>
 

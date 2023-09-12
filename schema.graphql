@@ -40,6 +40,14 @@ type EventsCollectionSegment {
     pageInfo: CollectionSegmentInfo!
 }
 
+"A segment of a collection."
+type EventsGuestCollectionSegment {
+    "A flattened list of the items."
+    items: [Event!]
+    "Information to aid in pagination."
+    pageInfo: CollectionSegmentInfo!
+}
+
 type Mutation {
     attendEvent(eventId: String!): Event!
     changeDisplayName(displayName: String!): User!
@@ -79,6 +87,7 @@ type NotificationsCollectionSegment {
 type Query {
     event(id: String!): Event
     events(order: [EventSortInput!], skip: Int, take: Int, where: EventFilterInput): EventsCollectionSegment
+    eventsGuest(order: [EventSortInput!], skip: Int, take: Int, where: EventFilterInput): EventsGuestCollectionSegment
     notifications(order: [NotificationSortInput!], skip: Int, take: Int, where: NotificationFilterInput): NotificationsCollectionSegment
     user(uid: String!): User
     users(order: [UserSortInput!], where: UserFilterInput): [User!]!

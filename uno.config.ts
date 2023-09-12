@@ -33,6 +33,7 @@ export default defineConfig({
     },
     colors: {
       neutral: {
+        50: '#F9FAFB',
         300: '#F3F4F6',
         400: '#D9D9D9',
         500: '#9CA3AF',
@@ -40,6 +41,7 @@ export default defineConfig({
       },
       primary: {
         500: '#F0F',
+        700: '#c844f5',
       },
       secondary: {
         500: '#00ffff',

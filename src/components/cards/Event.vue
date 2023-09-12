@@ -18,12 +18,21 @@ const props = defineProps({
 const attendeeCount = computed(() => {
   return props.event.attendees?.length
 })
+
+/**
+ * Amount of attendees to display
+ * If there are 4 or less attendees, display all of them
+ * If there are more than 4 attendees, display 3 and show the amount of attendees
+ */
 const amountOfDisplayAttendees = computed(() => {
   if (attendeeCount.value == undefined) return 0
   if (attendeeCount.value == 4) return 4
   return Math.min(3, attendeeCount.value)
 })
 
+/**
+ * Formatted start date of the event to a readable format with leading zero's
+ */
 const startDate = computed(() => {
   const date = new Date(props.event.startDate)
   // format DD/MM/YYYY with leading zero
@@ -33,11 +42,18 @@ const startDate = computed(() => {
   return `${day}/${month}/${year}`
 })
 
+/**
+ * Check if the current user is attending the event
+ */
 const isAttending = computed(() => {
   return props.event.attendees?.some(
     attendee => attendee.uid === currentUser?.uid,
   )
 })
+
+/**
+ * Check if the current user is interested in the event
+ */
 const isInterested = computed(() => {
   return props.event.interested?.some(
     attendee => attendee.uid === currentUser?.uid,
@@ -108,9 +124,9 @@ const manageRSVP = () => {
       </div>
 
       <CtaSubtile @click.prevent="manageRSVP" class="hover:bg-pink p-2">
-        <div v-if="isAttending">Je gaat</div>
-        <div v-else-if="isInterested">Geïnteresseerd</div>
-        <div v-else>Ook gaan?</div>
+        <div v-if="isAttending">Going</div>
+        <div v-else-if="isInterested">Interested</div>
+        <div v-else>Attend?</div>
       </CtaSubtile>
     </div>
   </router-link>
