@@ -28,17 +28,6 @@ const query = graphql(`
   }
 `)
 
-const changeUserNameGql = graphql(`
-  mutation changeUserName($username: String!) {
-    changeDisplayName(displayName: $username) {
-      id
-      username
-    }
-  }
-`)
-
-const { mutate: changeUserName } = useMutation(changeUserNameGql)
-
 const changeSocialsGql = graphql(`
   mutation changeSocials($socials: SocialsInput!) {
     updateSocials(socials: $socials) {

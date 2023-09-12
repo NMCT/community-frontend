@@ -13,6 +13,8 @@ import {
   signInWithRedirect,
   signOut,
   updatePassword,
+  EmailAuthProvider,
+  reauthenticateWithCredential,
   updateProfile,
   User,
 } from 'firebase/auth'
@@ -304,6 +306,33 @@ const uploadProfilePicture = async (blob: Blob): Promise<string> => {
 
   return downloadUrl
 }
+
+const validatePassword = (password: string): Promise<boolean> => {
+  return new Promise((resolve, reject) => {
+    if (!auth.currentUser || auth.currentUser?.email === null) {
+      reject({ code: 'no user', message: 'no user' })
+      return
+    }
+    const credential = EmailAuthProvider.credential(
+      auth.currentUser.email,
+      password,
+    )
+
+    // Prompt the user to re-provide their sign-in credentials
+
+    reauthenticateWithCredential(auth.currentUser, credential)
+      .then(function () {
+        // User re-authenticated.
+        resolve(true)
+      })
+      .catch(function (error) {
+        // An error happened.
+        const errorCode = error.code
+        const errorMessage = error.message
+        reject({ code: errorCode, message: errorMessage })
+      })
+  })
+}
 export const useFirebase = () => {
   return {
     auth,
@@ -320,5 +349,6 @@ export const useFirebase = () => {
     passwordReset,
     register,
     restoreLogin,
+    validatePassword,
   }
 }

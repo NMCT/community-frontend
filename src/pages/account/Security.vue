@@ -2,8 +2,16 @@
 import { useFirebase } from '@/composables/useFirebase.ts'
 import { useUser } from '@/composables/useUser.ts'
 import { useQuery } from '@vue/apollo-composable'
+import { ref, watch } from 'vue'
+import { useMutations } from '@/composables/useMutations.ts'
 
-const { firebaseUser, changePassword } = useFirebase()
+const { changeUserName } = useMutations()
+const { firebaseUser, changePassword, validatePassword } = useFirebase()
+const isChangingPassword = ref<boolean>(false)
+const passwordChangedSuccessfully = ref<boolean>(false)
+const isChangingUsername = ref<boolean>(false)
+const usernameChangedSuccessfully = ref<boolean>(false)
+
 const uid = firebaseUser.value?.uid
 const email = firebaseUser.value?.email
 const emailVerified = firebaseUser.value?.emailVerified
@@ -16,21 +24,118 @@ const { result } = useQuery(getUserQuery, { id: uid })
 
 const isMicrosoftUser =
   firebaseUser.value?.providerData[0].providerId === 'microsoft.com'
+
+const errors = ref<string[] | undefined>(undefined)
+const resetPassword = (e: any) => {
+  validatePassword(e['old-password'])
+    .then(() => {
+      changePassword(e['new-password'])
+      isChangingPassword.value = false
+      passwordChangedSuccessfully.value = true
+    })
+    .catch(e => {
+      console.log(e)
+      errors.value = [e.message]
+    })
+}
+watch(passwordChangedSuccessfully, () => {
+  setTimeout(() => {
+    passwordChangedSuccessfully.value = false
+  }, 5000)
+})
+watch(usernameChangedSuccessfully, () => {
+  setTimeout(() => {
+    usernameChangedSuccessfully.value = false
+  }, 5000)
+})
+
+const changeUsername = async (e: any) => {
+  console.log(e)
+  const username = e.username
+  changeUserName({ username }).then(e => {
+    console.log('success')
+    isChangingUsername.value = false
+    usernameChangedSuccessfully.value = true
+  })
+}
 </script>
 
 <template>
-  <div class="my-4">
-    <div class="font-title text-lg">security</div>
+  <div class="mx-4 my-4 w-full">
+    <div class="font-title pb-4 text-lg">security</div>
     <div>
-      <div>
-        <h3>email address</h3>
-        <p>the email address associated with your account</p>
+      <div class="b-b-1 b-neutral-400 flex w-full justify-between pb-2">
+        <div>
+          <h3>Email address</h3>
+          <p>The email address associated with your account</p>
+        </div>
         <p>{{ email }}</p>
       </div>
-      <div v-if="!isMicrosoftUser">
-        <h3>Password</h3>
-        <p>Set a unique password to secure your account</p>
-        <button @click="">Change Password</button>
+      <div v-if="!isMicrosoftUser" class="b-neutral-400 b-b-1 mt-4 pb-2">
+        <div class="flex justify-between">
+          <div>
+            <h3>Password</h3>
+            <p>Set a unique password to secure your account</p>
+          </div>
+          <button
+            @click="() => (isChangingPassword = true)"
+            v-if="!isChangingPassword"
+          >
+            Change Password
+          </button>
+        </div>
+        <div v-if="isChangingPassword" class="pt-2">
+          <FormKit type="form" @submit="resetPassword" :errors="errors">
+            <FormKit
+              autocomplete="current-password"
+              name="old-password"
+              type="password"
+              label="Old Password"
+              placeholder="Old Password"
+              rules="required"
+            />
+            <FormKit
+              autocomplete="new-password"
+              name="new-password"
+              type="password"
+              label="Password"
+              placeholder="Password"
+              rules="required"
+            ></FormKit>
+          </FormKit>
+        </div>
+        <div v-if="passwordChangedSuccessfully">
+          <p class="font-bold underline">Password changed successfully</p>
+        </div>
+      </div>
+      <div class="b-neutral-400 b-b-1 mt-4 pb-2">
+        <div class="flex justify-between">
+          <div>
+            <h3>Username</h3>
+            <div>How people see you</div>
+          </div>
+          <div class="text-right">
+            <div>{{ firebaseUser?.displayName ?? 'No username' }}</div>
+            <button
+              v-if="!isMicrosoftUser && !isChangingUsername"
+              @click="() => (isChangingUsername = true)"
+            >
+              Change username
+            </button>
+          </div>
+        </div>
+        <div v-if="isChangingUsername">
+          <FormKit type="form" @submit="changeUsername" :errors="errors">
+            <FormKit
+              name="username"
+              type="text"
+              label="Username"
+              placeholder="Username"
+              rules="required | length:3"
+              autocomplete="username"
+            />
+          </FormKit>
+        </div>
       </div>
     </div>
   </div>

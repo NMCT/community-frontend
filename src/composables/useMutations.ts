@@ -64,6 +64,16 @@ const uninterestEventGql = graphql(`
 
 const { mutate: uninterestEvent } = useMutation(uninterestEventGql)
 
+const changeUserNameGql = graphql(`
+  mutation changeUserName($username: String!) {
+    changeDisplayName(displayName: $username) {
+      id
+      username
+    }
+  }
+`)
+const { mutate: changeUserName } = useMutation(changeUserNameGql)
+
 export const useMutations = () => {
   return {
     updateProfilePicture,
@@ -71,5 +81,6 @@ export const useMutations = () => {
     unattendEvent,
     interestEvent,
     uninterestEvent,
+    changeUserName,
   }
 }
