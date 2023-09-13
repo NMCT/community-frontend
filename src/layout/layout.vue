@@ -53,7 +53,7 @@ watch(
     if (firebaseUser.value) {
       navigation.value.account.name =
         firebaseUser.value.displayName ?? 'Account'
-      navigation.value.account.path = '/account/security'
+      navigation.value.account.path = '/account/general'
       if (navigation.value.events.meta) {
         navigation.value.events.meta.isHidden = false
       }

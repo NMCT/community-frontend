@@ -160,6 +160,6 @@ const search = (e: any) => {
 <style scoped>
 .layout {
   grid-template-columns: repeat(auto-fill, minmax(28rem, 1fr));
-  grid-template-rows: max-content;
+  grid-template-rows: max-coPrototyping consultntent;
 }
 </style>

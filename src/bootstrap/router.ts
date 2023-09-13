@@ -14,7 +14,7 @@ export enum routes {
   passwordReset = 'PasswordReset',
   account = 'Account',
   accountHome = 'AccountHome',
-  accountSecurity = 'AccountSecurity',
+  accountGeneral = 'AccountGeneral',
   accountSocial = 'AccountSocial',
   new = 'New',
   notFound = '404',
@@ -90,9 +90,9 @@ export const router = createRouter({
       component: () => import('@/pages/account/Account.vue'),
       children: [
         {
-          path: 'security',
-          name: routes.accountSecurity,
-          component: () => import('@/pages/account/Security.vue'),
+          path: 'general',
+          name: routes.accountGeneral,
+          component: () => import('@/pages/account/General.vue'),
         },
         {
           path: 'social',

@@ -18,10 +18,10 @@ const section = computed(() => route.path.split('/')[2])
         <div
           class="font-title text-lg leading-7"
           :class="{
-            'text-primary-500': section === 'security',
+            'text-primary-500': section === 'general',
           }"
         >
-          <RouterLink to="/account/security"> Security</RouterLink>
+          <RouterLink to="/account/general"> General</RouterLink>
         </div>
         <div
           class="font-title text-lg leading-7"

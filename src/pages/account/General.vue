@@ -1,7 +1,5 @@
 <script setup lang="ts">
 import { useFirebase } from '@/composables/useFirebase.ts'
-import { useUser } from '@/composables/useUser.ts'
-import { useQuery } from '@vue/apollo-composable'
 import { ref, watch } from 'vue'
 import { useMutations } from '@/composables/useMutations.ts'
 
@@ -20,10 +18,8 @@ const email = firebaseUser.value?.email
 const emailVerified = firebaseUser.value?.emailVerified
 console.log(firebaseUser.value)
 
-const { getUserQuery } = useUser()
 console.log(uid)
 if (!uid) throw new Error('no uid')
-const { result } = useQuery(getUserQuery, { id: uid })
 
 const isMicrosoftUser =
   firebaseUser.value?.providerData[0].providerId === 'microsoft.com'
@@ -74,7 +70,7 @@ const changeProfilePictureEvent = (e: any) => {
 
 <template>
   <div class="mx-4 my-4 w-full">
-    <div class="font-title pb-4 text-lg">security</div>
+    <div class="font-title pb-4 text-lg">General</div>
     <div>
       <div class="b-b-1 b-neutral-400 flex w-full justify-between pb-2">
         <div>
@@ -148,9 +144,20 @@ const changeProfilePictureEvent = (e: any) => {
             />
           </FormKit>
         </div>
+        <div v-if="usernameChangedSuccessfully">
+          <p class="font-bold underline">Username changed successfully</p>
+        </div>
       </div>
       <div class="b-neutral-400 b-b-1 mt-4 flex justify-between pb-2">
-        <div>Your profile picture</div>
+        <div>
+          <div>Your profile picture</div>
+          <div v-if="!isMicrosoftUser" class="font-300 text-sm">
+            Hover image to upload file
+          </div>
+          <div v-else class="font-300 text-sm">
+            Change your profile picture on your Microsoft account
+          </div>
+        </div>
         <input
           type="file"
           id="file-input"

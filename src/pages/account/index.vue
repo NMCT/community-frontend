@@ -76,10 +76,6 @@ const submitForm = async (e: any) => {
   }
   const username = e.username
 
-  if (username !== user.value?.username) {
-    await changeUserName({ username })
-  }
-
   if (socials !== user.value?.socials) {
     await changeSocials({ socials })
   }
