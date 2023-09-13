@@ -6,11 +6,14 @@ import { ref, watch } from 'vue'
 import { useMutations } from '@/composables/useMutations.ts'
 
 const { changeUserName } = useMutations()
-const { firebaseUser, changePassword, validatePassword } = useFirebase()
+const { firebaseUser, changePassword, validatePassword, changeProfilePicture } =
+  useFirebase()
 const isChangingPassword = ref<boolean>(false)
 const passwordChangedSuccessfully = ref<boolean>(false)
 const isChangingUsername = ref<boolean>(false)
 const usernameChangedSuccessfully = ref<boolean>(false)
+const isHoveringProfilePicture = ref<boolean>(false)
+const isFocusProfilePicture = ref<boolean>(false)
 
 const uid = firebaseUser.value?.uid
 const email = firebaseUser.value?.email
@@ -56,7 +59,16 @@ const changeUsername = async (e: any) => {
     console.log('success')
     isChangingUsername.value = false
     usernameChangedSuccessfully.value = true
+    // reload firebaseUser
+    firebaseUser.value?.reload()
   })
+}
+
+const changeProfilePictureEvent = (e: any) => {
+  const file = e.target.files[0]
+  console.log(file)
+  if (!file) return
+  changeProfilePicture(file)
 }
 </script>
 
@@ -136,6 +148,46 @@ const changeUsername = async (e: any) => {
             />
           </FormKit>
         </div>
+      </div>
+      <div class="b-neutral-400 b-b-1 mt-4 flex justify-between pb-2">
+        <div>Your profile picture</div>
+        <input
+          type="file"
+          id="file-input"
+          accept="image/png, image/jpeg"
+          class="hidden"
+          :disabled="isMicrosoftUser"
+          @change="changeProfilePictureEvent"
+        />
+        <label for="file-input">
+          <img
+            @mouseenter="
+              () => {
+                if (!isMicrosoftUser) isHoveringProfilePicture = true
+              }
+            "
+            @mouseleave="isHoveringProfilePicture = false"
+            @focusin="
+              () => {
+                if (!isMicrosoftUser) isFocusProfilePicture = true
+              }
+            "
+            @focusout="isFocusProfilePicture = false"
+            :src="
+              isHoveringProfilePicture || isFocusProfilePicture
+                ? '/upload.svg'
+                : firebaseUser?.photoURL ??
+                  'https://st3.depositphotos.com/6672868/13701/v/450/depositphotos_137014128-stock-illustration-user-profile-icon.jpg'
+            "
+            alt="Your profile picture"
+            class="h16 w-16 rounded-full object-cover"
+            :class="{
+              'bg-neutral-500':
+                isHoveringProfilePicture || isFocusProfilePicture,
+              'cursor-pointer': !isMicrosoftUser,
+            }"
+          />
+        </label>
       </div>
     </div>
   </div>

@@ -307,6 +307,27 @@ const uploadProfilePicture = async (blob: Blob): Promise<string> => {
   return downloadUrl
 }
 
+const changeProfilePicture = async (file: File) => {
+  const storageReference = storageRef(
+    storage,
+    'profilePictures/' + firebaseUser.value?.uid,
+  )
+
+  // todo compress image to 420x420
+
+  const snapshot = await uploadBytes(storageReference, file)
+  console.log('Uploaded a blob or file!', snapshot)
+  // get download url
+  const downloadUrl = await getDownloadURL(storageReference)
+  if (firebaseUser.value) {
+    await updateProfile(firebaseUser.value, {
+      photoURL: downloadUrl,
+    })
+  }
+
+  // update profile picture
+}
+
 const validatePassword = (password: string): Promise<boolean> => {
   return new Promise((resolve, reject) => {
     if (!auth.currentUser || auth.currentUser?.email === null) {
@@ -337,6 +358,7 @@ export const useFirebase = () => {
   return {
     auth,
     changePassword,
+    changeProfilePicture,
     currentUser: auth.currentUser,
     downloadProfilePicture,
     firebaseUser,
