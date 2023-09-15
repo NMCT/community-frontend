@@ -3,6 +3,7 @@ import { useRouter } from 'vue-router'
 import { useFirebase } from '@/composables/useFirebase.ts'
 import { ref, watch } from 'vue'
 import { useWindowSize } from '@vueuse/core'
+import { LucideMenu } from 'lucide-vue-next'
 
 const { width } = useWindowSize()
 
@@ -70,6 +71,11 @@ watch(
   },
   { deep: true, immediate: true },
 )
+
+const isMenuOpen = ref<boolean>(false)
+const toggleMenu = () => {
+  isMenuOpen.value = !isMenuOpen.value
+}
 </script>
 
 <template>
@@ -100,6 +106,28 @@ watch(
       </ul>
       <div v-else>
         <!--        Todo: mobile nav-->
+        <LucideMenu @click="toggleMenu" />
+      </div>
+      <div v-if="isMenuOpen">
+        <!-- darker shade when menu is open -->
+        <div class="fixed inset-0 bg-black bg-opacity-50"></div>
+        <!-- menu itself -->
+        <div class="fixed inset-y-0 right-0 w-64 bg-white">
+          <div class="flex justify-end">
+            <LucideMenu @click="toggleMenu" class="mr-4 mt-4" />
+          </div>
+          <ul class="flex flex-col items-center justify-center gap-16 text-lg">
+            <li
+              v-for="nav in navigation"
+              :key="nav.name"
+              :class="{
+                'text-primary-500': nav.meta?.highLight,
+              }"
+            >
+              <router-link :to="nav.path">{{ nav.name }}</router-link>
+            </li>
+          </ul>
+        </div>
       </div>
     </header>
 

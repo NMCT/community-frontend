@@ -40,9 +40,13 @@ const { result, error, loading } = useQuery(
 </script>
 
 <template>
-  <section class="mb-52 mt-48 flex flex-col items-center justify-center">
-    <h2 class="font-title text-8xl text-neutral-700">Get sh*t done!</h2>
-    <div class="mt-6 max-w-md text-center font-sans text-lg">
+  <section
+    class="my-20 flex flex-col items-center justify-center md:mb-52 md:mt-48"
+  >
+    <h2 class="font-title text-4xl text-neutral-700 md:text-8xl">
+      Get sh*t done!
+    </h2>
+    <div class="mt-6 max-w-md text-center font-sans md:text-lg">
       <wrap-balancer :ratio="0.7">
         With some help from fellow students, you will find extra motivation,
         learn more and get to meet new people!
@@ -54,9 +58,11 @@ const { result, error, loading } = useQuery(
       <span class="font-sans">See coming events</span>
     </call-to-action>
   </section>
-  <section class="mb-70 flex flex-col items-center justify-center">
-    <h3 class="font-title text-6xl text-neutral-700">How it works.</h3>
-    <div class="mt-6 max-w-md text-center font-sans text-lg">
+  <section class="md:mb-70 my-20 flex flex-col items-center justify-center">
+    <h3 class="font-title text-3xl text-neutral-700 md:text-6xl">
+      How it works.
+    </h3>
+    <div class="mt-6 max-w-md text-center font-sans md:text-lg">
       <wrap-balancer :ratio="0.7">
         You are stronger with some help... Work with other students and get more
         done.
@@ -65,8 +71,8 @@ const { result, error, loading } = useQuery(
       <!--      TODO: Illustration here-->
     </div>
   </section>
-  <section class="mb-70 flex flex-col items-center justify-center">
-    <h3 class="font-title text-6xl text-neutral-700">Coming up</h3>
+  <section class="md:mb-70 mb-20 flex flex-col items-center justify-center">
+    <h3 class="font-title text-3xl text-neutral-700 md:text-6xl">Coming up</h3>
     <div class="mt-8 text-center text-lg">
       Events to help you to become a better version of you.
     </div>
@@ -74,11 +80,11 @@ const { result, error, loading } = useQuery(
       <span>Check out all events</span>
     </CtaSubtile>
     <div
-      class="mt-13 flex flex-row flex-wrap justify-center gap-8"
+      class="mt-13 layout grid gap-8 md:flex md:flex-row md:flex-wrap md:justify-center"
       v-if="result && result.eventsGuest"
     >
       <Event
-        class="w-md"
+        class="md:w-md"
         :event="event as IEvent"
         v-for="event of result.eventsGuest.items"
         :key="event.id"
@@ -87,4 +93,11 @@ const { result, error, loading } = useQuery(
   </section>
 </template>
 
-<style scoped></style>
+<style scoped>
+@media (min-width: 768px) {
+  .layout {
+    grid-template-columns: repeat(auto-fill, minmax(28rem, 1fr));
+    grid-template-rows: max-content;
+  }
+}
+</style>

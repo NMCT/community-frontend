@@ -2,6 +2,7 @@
 import { useFirebase } from '@/composables/useFirebase.ts'
 import { ref, watch } from 'vue'
 import { useMutations } from '@/composables/useMutations.ts'
+import { useWindowSize } from '@vueuse/core'
 
 const { changeUserName } = useMutations()
 const { firebaseUser, changePassword, validatePassword, changeProfilePicture } =
@@ -12,13 +13,10 @@ const isChangingUsername = ref<boolean>(false)
 const usernameChangedSuccessfully = ref<boolean>(false)
 const isHoveringProfilePicture = ref<boolean>(false)
 const isFocusProfilePicture = ref<boolean>(false)
-
+const { width } = useWindowSize()
 const uid = firebaseUser.value?.uid
 const email = firebaseUser.value?.email
 const emailVerified = firebaseUser.value?.emailVerified
-console.log(firebaseUser.value)
-
-console.log(uid)
 if (!uid) throw new Error('no uid')
 
 const isMicrosoftUser =
@@ -49,7 +47,6 @@ watch(usernameChangedSuccessfully, () => {
 })
 
 const changeUsername = async (e: any) => {
-  console.log(e)
   const username = e.username
   changeUserName({ username }).then(e => {
     console.log('success')
@@ -62,32 +59,33 @@ const changeUsername = async (e: any) => {
 
 const changeProfilePictureEvent = (e: any) => {
   const file = e.target.files[0]
-  console.log(file)
   if (!file) return
   changeProfilePicture(file)
 }
 </script>
 
 <template>
-  <div class="mx-4 my-4 w-full">
+  <div class="mx-4 my-4 lg:w-full">
     <div class="font-title pb-4 text-lg">General</div>
     <div>
-      <div class="b-b-1 b-neutral-400 flex w-full justify-between pb-2">
+      <div class="b-b-1 b-neutral-400 justify-between pb-2 lg:flex lg:w-full">
         <div>
-          <h3>Email address</h3>
-          <p>The email address associated with your account</p>
+          <h3 class="text-lg font-medium">Email address</h3>
         </div>
         <p>{{ email }}</p>
       </div>
       <div v-if="!isMicrosoftUser" class="b-neutral-400 b-b-1 mt-4 pb-2">
-        <div class="flex justify-between">
+        <div class="justify-between lg:flex">
           <div>
-            <h3>Password</h3>
+            <h3 class="font-medium">Password</h3>
             <p>Set a unique password to secure your account</p>
           </div>
           <button
             @click="() => (isChangingPassword = true)"
             v-if="!isChangingPassword"
+            :class="{
+              underline: width < 1024,
+            }"
           >
             Change Password
           </button>
@@ -117,16 +115,18 @@ const changeProfilePictureEvent = (e: any) => {
         </div>
       </div>
       <div class="b-neutral-400 b-b-1 mt-4 pb-2">
-        <div class="flex justify-between">
+        <div class="justify-between lg:flex">
           <div>
-            <h3>Username</h3>
-            <div>How people see you</div>
+            <h3 class="text-lg font-medium">Username</h3>
           </div>
-          <div class="text-right">
+          <div class="lg:text-right">
             <div>{{ firebaseUser?.displayName ?? 'No username' }}</div>
             <button
               v-if="!isMicrosoftUser && !isChangingUsername"
               @click="() => (isChangingUsername = true)"
+              :class="{
+                underline: width < 1024,
+              }"
             >
               Change username
             </button>
@@ -150,7 +150,7 @@ const changeProfilePictureEvent = (e: any) => {
       </div>
       <div class="b-neutral-400 b-b-1 mt-4 flex justify-between pb-2">
         <div>
-          <div>Your profile picture</div>
+          <div class="text-lg font-medium">Your profile picture</div>
           <div v-if="!isMicrosoftUser" class="font-300 text-sm">
             Hover image to upload file
           </div>

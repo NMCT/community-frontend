@@ -30,7 +30,7 @@ watch(
 </script>
 discord
 <template>
-  <div class="mx-4 my-4 w-full">
+  <div class="mx-4 my-4 lg:w-full">
     <div class="font-title">Socials</div>
 
     <div>

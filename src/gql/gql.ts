@@ -26,6 +26,7 @@ const documents = {
     "\n    query getEvents(\n      $afterDate: DateTime\n      $audience: String\n      $order: SortEnumType\n      $query: String\n    ) {\n      events(\n        where: {\n          title: { contains: $query }\n          startDate: { gt: $afterDate }\n          audience: { contains: $audience }\n        }\n        order: { startDate: $order }\n      ) {\n        items {\n          id\n          startDate\n          attendees {\n            profilePicture\n            uid\n          }\n          interested {\n            profilePicture\n            uid\n          }\n          audience\n          title\n          location\n        }\n      }\n    }\n  ": types.GetEventsDocument,
     "\n    query getUpcomingEvents($afterDate: DateTime) {\n      eventsGuest(where: { startDate: { gt: $afterDate } }, take: 3) {\n        items {\n          id\n          startDate\n          attendees {\n            profilePicture\n            uid\n          }\n          interested {\n            profilePicture\n            uid\n          }\n          audience\n          title\n          location\n        }\n      }\n    }\n  ": types.GetUpcomingEventsDocument,
     "\n  mutation createNewEvent($input: EventInput!) {\n    createEvent(eventInput: $input) {\n      id\n      title\n      location\n      type\n      description\n      startDate\n      endDate\n      maxAttendees\n      openToGuests\n    }\n  }\n": types.CreateNewEventDocument,
+    "\n  query getUserById($uid: String!) {\n    user(uid: $uid) {\n      firebaseId\n      email\n      profilePictureUri\n      username\n      socials {\n        discord\n        facebook\n        instagram\n        linkedIn\n      }\n    }\n  }\n": types.GetUserByIdDocument,
 };
 
 /**
@@ -94,6 +95,10 @@ export function graphql(source: "\n    query getUpcomingEvents($afterDate: DateT
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(source: "\n  mutation createNewEvent($input: EventInput!) {\n    createEvent(eventInput: $input) {\n      id\n      title\n      location\n      type\n      description\n      startDate\n      endDate\n      maxAttendees\n      openToGuests\n    }\n  }\n"): (typeof documents)["\n  mutation createNewEvent($input: EventInput!) {\n    createEvent(eventInput: $input) {\n      id\n      title\n      location\n      type\n      description\n      startDate\n      endDate\n      maxAttendees\n      openToGuests\n    }\n  }\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "\n  query getUserById($uid: String!) {\n    user(uid: $uid) {\n      firebaseId\n      email\n      profilePictureUri\n      username\n      socials {\n        discord\n        facebook\n        instagram\n        linkedIn\n      }\n    }\n  }\n"): (typeof documents)["\n  query getUserById($uid: String!) {\n    user(uid: $uid) {\n      firebaseId\n      email\n      profilePictureUri\n      username\n      socials {\n        discord\n        facebook\n        instagram\n        linkedIn\n      }\n    }\n  }\n"];
 
 export function graphql(source: string) {
   return (documents as any)[source] ?? {};
