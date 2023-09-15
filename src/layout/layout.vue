@@ -2,6 +2,9 @@
 import { useRouter } from 'vue-router'
 import { useFirebase } from '@/composables/useFirebase.ts'
 import { ref, watch } from 'vue'
+import { useWindowSize } from '@vueuse/core'
+
+const { width } = useWindowSize()
 
 const { firebaseUser } = useFirebase()
 const router = useRouter()
@@ -75,11 +78,16 @@ watch(
       class="font-title font-400 mx8 my-4 flex items-center justify-between text-neutral-700"
     >
       <!--      Title -->
-      <div>MCT Community</div>
+      <h1>
+        <router-link to="/">MCT Community</router-link>
+      </h1>
 
       <!--      Navigation -->
 
-      <ul class="flex items-center justify-end gap-16 text-lg">
+      <ul
+        class="flex items-center justify-end gap-16 text-lg"
+        v-if="width > 800"
+      >
         <li
           v-for="nav in navigation"
           :key="nav.name"
@@ -90,6 +98,9 @@ watch(
           <router-link :to="nav.path">{{ nav.name }}</router-link>
         </li>
       </ul>
+      <div v-else>
+        <!--        Todo: mobile nav-->
+      </div>
     </header>
 
     <button @click="clickLogout" v-if="false">Log out</button>

@@ -2,6 +2,7 @@ import { FirebaseApp, initializeApp } from 'firebase/app'
 import {
   Auth,
   browserSessionPersistence,
+  browserLocalPersistence,
   createUserWithEmailAndPassword,
   getAuth,
   getRedirectResult,
@@ -50,7 +51,7 @@ console.log({ app })
 const auth: Auth = getAuth(app)
 const storage = getStorage(app)
 
-setPersistence(auth, browserSessionPersistence)
+setPersistence(auth, browserLocalPersistence)
   .then(r => console.log('setPersistence', r))
   .catch(e => console.log('setPersistence', e))
 

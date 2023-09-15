@@ -9,10 +9,12 @@ import { useFirebase } from '@/composables/useFirebase.ts'
 import Attending from '@/components/elements/Attending.vue'
 import Interested from '@/components/elements/Interested.vue'
 import { LucidePencil } from 'lucide-vue-next'
+import { useWindowSize } from '@vueuse/core'
 
 const { currentRoute } = useRouter()
 const { id } = currentRoute.value.params as { id: string }
 const { firebaseUser } = useFirebase()
+const { width, height } = useWindowSize()
 
 interface IEvent {
   event: Event
@@ -143,13 +145,16 @@ const noPfpUrl = ref(
 <template>
   <div v-if="loading"></div>
   <div v-else-if="error"></div>
-  <div v-else-if="result" class="lg:mx-a mx-12 my-10 max-w-7xl">
+  <div
+    v-else-if="result"
+    class="2xl:mx-a mx-4 my-10 max-w-7xl pb-10 md:mx-12 md:pb-0"
+  >
     <div class="lg:flex lg:flex-row lg:justify-between">
       <div class="lg:max-w-3/5">
-        <h2 class="font-title text-6xl text-neutral-700">
+        <h2 class="font-title text-2xl text-neutral-700 lg:text-6xl">
           {{ result.event.title }}
         </h2>
-        <div class="my-6 flex flex-row flex-wrap gap-x-10 gap-y-2">
+        <div class="my-6 flex flex-col flex-wrap gap-x-10 gap-y-2 sm:flex-row">
           <div>
             <div class="text-lg">Location</div>
             <div class="font-menlo text-neutral-500">
@@ -174,10 +179,19 @@ const noPfpUrl = ref(
               {{ freeSeats }} / {{ result.event.maxAttendees }}
             </div>
           </div>
+          <div
+            v-if="result.event.interested && result.event.interested.length > 0"
+          >
+            <div class="text-lg">Interested</div>
+            <div class="font-menlo text-neutral-500">
+              {{ result.event.interested.length }}
+              {{ result.event.interested.length === 1 ? 'person' : 'people' }}
+            </div>
+          </div>
         </div>
       </div>
       <div class="lg:max-w-2/5">
-        <div class="flex flex-row gap-6">
+        <div class="flex flex-row flex-wrap gap-2 sm:gap-6" v-if="width > 768">
           <Interested
             :id="id"
             :is-loading="loading"
@@ -193,7 +207,7 @@ const noPfpUrl = ref(
             </RouterLink>
           </div>
         </div>
-        <div class="b-3 b-neutral-300 rounded-2 my-8 w-full px-6 py-4">
+        <div class="b-3 b-neutral-300 rounded-2 mt-8 w-full px-6 py-4">
           <p class="mb-2 text-lg">organizer</p>
           <div class="hosted-by flex flex-row items-center gap-x-2">
             <img
@@ -211,7 +225,7 @@ const noPfpUrl = ref(
 
     <div v-html="description" class="md"></div>
 
-    <div class="attendees b-t-neutral-500">
+    <div class="attendees b-t-neutral-500 mt4">
       <div class="text-lg">Attendees</div>
       <div class="layout grid">
         <!-- // todo -->
@@ -226,6 +240,53 @@ const noPfpUrl = ref(
             :title="attendee.name!"
             class="h-10 w-10 rounded-full object-cover"
           />
+        </RouterLink>
+      </div>
+    </div>
+    <div class="interestees b-t-neutral-500 mt-4">
+      <div class="text-lg">People Interested</div>
+      <div class="layout grid">
+        <!-- // todo -->
+        <RouterLink
+          v-for="attendee of result.event.interested"
+          :to="`/profile/${attendee.uid}`"
+          :key="attendee.uid"
+        >
+          <img
+            :src="attendee.profilePicture ?? noPfpUrl"
+            :alt="attendee.name!"
+            :title="attendee.name!"
+            class="h-10 w-10 rounded-full object-cover"
+          />
+        </RouterLink>
+      </div>
+    </div>
+
+    <!-- attending / interested for mobile only -->
+    <div
+      class="fixed inset-x-0 bottom-2 flex border-collapse flex-row content-center justify-between gap-[2px] bg-neutral-500 sm:justify-end"
+      v-if="width < 768"
+    >
+      <Interested
+        class="px2 w-full bg-neutral-50 py-2"
+        type="mobile"
+        :id="id"
+        :is-loading="loading"
+        :is-interested="isInterested"
+      />
+      <attending
+        class="px2 w-full bg-neutral-50 py-2"
+        type="mobile"
+        :id="id"
+        :isAttending="isAttending"
+        :isLoading="loading"
+      />
+      <div
+        v-if="result.event.organizer.uid === firebaseUser?.uid"
+        class="mr-8 self-center bg-neutral-50"
+      >
+        <RouterLink :to="`/events/${result.event.id}/edit`">
+          <LucidePencil />
         </RouterLink>
       </div>
     </div>

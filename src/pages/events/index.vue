@@ -11,6 +11,7 @@ import WrapBalancer from 'vue-wrap-balancer'
 import Loader from '@/components/elements/Loader.vue'
 import AudienceSelector from '@/components/elements/AudienceSelector.vue'
 import { LucideArrowDown, LucideArrowUp, LucideSearch } from 'lucide-vue-next'
+import { debounce } from 'lodash'
 
 const { firebaseUser } = useFirebase()
 
@@ -101,14 +102,20 @@ const search = (e: any) => {
     searchQuery: searchQuery.value,
   })
 }
+
+const debouncedSearch = debounce(search, 500)
 </script>
 
 <template>
-  <section class="mx-a max-w-[90rem]">
+  <section class="2xl:mx-a mx-4 max-w-[90rem] md:mx-8">
     <div
-      class="mt-40 grid grid-flow-col grid-cols-2 grid-rows-2 justify-between gap-y-10"
+      class="mt-8 grid-flow-col grid-cols-2 grid-rows-2 lg:mt-40 lg:grid lg:justify-between lg:gap-y-10"
     >
-      <h2 class="font-title text-8xl text-neutral-700">Events</h2>
+      <h2
+        class="font-title leading-15 lg:leading-30 text-4xl text-neutral-700 lg:text-8xl"
+      >
+        Events
+      </h2>
 
       <p class="max-w-md text-lg">
         <wrap-balancer>
@@ -118,19 +125,19 @@ const search = (e: any) => {
       </p>
 
       <RouterLink to="/new" class="self-end justify-self-end">
-        <CtaBold>
+        <CtaBold class="my-4">
           <CalendarSvg />
           Create an event
         </CtaBold>
       </RouterLink>
-      <div class="flex flex-row gap-4 self-end justify-self-end">
+      <div class="flex flex-row flex-wrap gap-4 self-end justify-self-end">
         <div class="grid">
           <input
             type="text"
-            @change="search"
+            @input="debouncedSearch"
             placeholder="Search.."
             name="search"
-            class="rounded-2 b-3 b-neutral-300 col-start-1 row-start-1 p-1 px-2"
+            class="rounded-2 b-3 b-neutral-300 max-w-32 col-start-1 row-start-1 p-1 px-2 md:w-64"
           />
           <LucideSearch
             class="col-start-1 row-start-1 mr-2 h-6 w-6 self-center justify-self-end"
@@ -158,8 +165,10 @@ const search = (e: any) => {
   </section>
 </template>
 <style scoped>
-.layout {
-  grid-template-columns: repeat(auto-fill, minmax(28rem, 1fr));
-  grid-template-rows: max-coPrototyping consultntent;
+@media (min-width: 768px) {
+  .layout {
+    grid-template-columns: repeat(auto-fill, minmax(28rem, 1fr));
+    grid-template-rows: max-content;
+  }
 }
 </style>

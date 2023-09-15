@@ -74,15 +74,17 @@ const manageRSVP = () => {
 <template>
   <router-link
     :to="`/events/${props.event.id}`"
-    class="rounded-2 p4 flex flex-col justify-between gap-6 border-4 border-neutral-300"
+    class="rounded-2 p4 flex-col justify-between gap-6 border-4 border-neutral-300 md:flex"
   >
-    <div class="flex flex-row justify-between">
-      <div class="max-w-[60%]">
-        <div class="font-title text-3xl leading-10 text-neutral-700">
+    <div class="flex-row justify-between md:flex">
+      <div class="md:max-w-[60%]">
+        <div
+          class="font-title text-wrap text-xl leading-10 text-neutral-700 md:text-3xl"
+        >
           {{ event.title }}
         </div>
         <div class="font-menlo text-xs leading-8 text-neutral-500">
-          {{ event.location }} voor {{ event.audience }}
+          {{ event.location }} for {{ event.audience }}
         </div>
       </div>
       <div class="font-menlo leading-10 text-neutral-500">
@@ -115,15 +117,15 @@ const manageRSVP = () => {
         </div>
 
         <div class="bg- ml-4 self-center text-lg">
-          {{ attendeeCount }} aanwezigen
+          {{ attendeeCount }} {{ attendeeCount > 1 ? 'attendees' : 'attendee' }}
         </div>
       </div>
       <div v-else>
         <!--       Todo: text update niemand is ingeschreven /-->
-        nog niemand ingeschreven
+        No attendees yet
       </div>
 
-      <CtaSubtile @click.prevent="manageRSVP" class="hover:bg-pink p-2">
+      <CtaSubtile @click.prevent="manageRSVP" class="hidden p-2 sm:block">
         <div v-if="isAttending">Going</div>
         <div v-else-if="isInterested">Interested</div>
         <div v-else>Attend?</div>
