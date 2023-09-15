@@ -113,6 +113,14 @@ export const router = createRouter({
       },
     },
     {
+      path: '/profile/:id',
+      name: 'profile',
+      component: () => import('@/pages/profile/Profile.vue'),
+      meta: {
+        requiresAuth: true,
+      },
+    },
+    {
       path: '/:pathMatch(.*)*',
       name: routes.notFound,
       component: () => import('@/pages/404.vue'),
@@ -120,6 +128,7 @@ export const router = createRouter({
         requiresAuth: false,
       },
     },
+
   ],
 })
 
